@@ -19,7 +19,9 @@ public class BlogRepositoryImpl implements BlogRepositoryCustom {
 
   @Override
   public Blog deleteBlog(String title) {
-    return null;
+    Query query = new Query();
+    query.addCriteria(Criteria.where("title").is(title));
+    return mongoTemplate.findAndRemove(query, Blog.class);
   }
 
   @Override
