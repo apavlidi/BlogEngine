@@ -2,9 +2,6 @@ package com.blogEngine.demo;
 
 import org.junit.rules.ExternalResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver;
-import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver.IndexDefinitionHolder;
-import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.Assert;
 
@@ -22,7 +19,7 @@ public class MongoCleanupRule extends ExternalResource {
    * @param testClassInstance the test class instance itself.
    * @param collectionClasses the entity classes representing the collections to clean.
    */
-  public MongoCleanupRule(final Object testClassInstance, final Class<?>... collectionClasses) {
+  MongoCleanupRule(final Object testClassInstance, final Class<?>... collectionClasses) {
     this(testClassInstance, "mongoTemplate", "getMongoTemplate", collectionClasses);
   }
 
@@ -37,7 +34,7 @@ public class MongoCleanupRule extends ExternalResource {
     this(testClassInstance, fieldOrGetterName, fieldOrGetterName, collectionClasses);
   }
 
-  protected MongoCleanupRule(final Object testClassInstance, final String fieldName,
+  private MongoCleanupRule(final Object testClassInstance, final String fieldName,
       final String getterName, final Class<?>... collectionClasses) {
     Assert.notNull(testClassInstance, "parameter 'testClassInstance' must not be null");
     Assert.notNull(fieldName, "parameter 'fieldName' must not be null");
@@ -53,26 +50,26 @@ public class MongoCleanupRule extends ExternalResource {
   }
 
   @Override
-  protected void before() throws Throwable {
+  protected void before() {
     dropCollections();
   }
 
-//  @Override
-//  protected void after() {
-//    dropCollections();
-//  }
+  @Override
+  protected void after() {
+    dropCollections();
+  }
 
-  protected Class<?>[] getMongoCollectionClasses() {
+  private Class<?>[] getMongoCollectionClasses() {
     return collectionClasses;
   }
 
-  protected void dropCollections() {
+  private void dropCollections() {
     for (final Class<?> type : getMongoCollectionClasses()) {
       getMongoTemplate().dropCollection(type);
     }
   }
 
-  protected MongoTemplate getMongoTemplate() {
+  private MongoTemplate getMongoTemplate() {
     try {
       Object value = ReflectionTestUtils.getField(testClassInstance, fieldName);
       if (value instanceof MongoTemplate) {

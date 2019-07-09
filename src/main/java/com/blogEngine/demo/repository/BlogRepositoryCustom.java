@@ -9,4 +9,6 @@ public interface BlogRepositoryCustom {
 
   Blog saveBlog(Blog blog);
 
+  Blog deleteBlog(String title);
+
 }

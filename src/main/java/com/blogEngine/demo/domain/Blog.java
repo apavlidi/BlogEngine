@@ -29,6 +29,12 @@ public class Blog {
     this.date = date;
   }
 
+  public Blog(String title,String text, LocalDate date) {
+    this.title = title;
+    this.text = text;
+    this.date = date;
+  }
+
   public String getText() {
     return text;
   }

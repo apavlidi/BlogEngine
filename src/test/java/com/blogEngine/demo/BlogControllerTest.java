@@ -7,12 +7,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.blogEngine.demo.controller.BlogController;
 import com.blogEngine.demo.domain.Blog;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -38,11 +40,45 @@ public class BlogControllerTest {
   }
 
   @Test
+  public void postBlog_ShouldReturnStatusOK() throws Exception {
+    given(blogService.saveBlog(new Blog("test"))).willReturn(new Blog("test", LocalDate.now()));
+
+    mockMvc.perform(MockMvcRequestBuilders.post("/blogs")
+        .content(asJsonString(new Blog("test")))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void deleteBlog_ShouldReturnStatusOK() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.delete("/blogs/1"))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void putBlog_ShouldReturnStatusOK() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.put("/blogs/1")
+        .content(asJsonString(new Blog("test")))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+  }
+
+  @Test
   public void getBlog_notFound() throws Exception {
     given(blogService.getBlogByTitle(anyString())).willThrow(new BlogNotFoundException());
 
     mockMvc.perform(MockMvcRequestBuilders.get("/blogs/1"))
         .andExpect(status().isNotFound());
+  }
+
+  public static String asJsonString(final Object obj) {
+    try {
+      return new ObjectMapper().writeValueAsString(obj);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
 }

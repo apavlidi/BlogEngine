@@ -18,6 +18,11 @@ public class BlogRepositoryImpl implements BlogRepositoryCustom {
   }
 
   @Override
+  public Blog deleteBlog(String title) {
+    return null;
+  }
+
+  @Override
   public Blog findByTitle(String title) {
     Query query = new Query();
     query.addCriteria(Criteria.where("title").is(title));
