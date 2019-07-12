@@ -34,4 +34,16 @@ public class ProfileServiceTest {
     assertThat(profile.getUsername()).isEqualTo("alexis");
   }
 
+  @Test
+  public void postProfile_shouldReturnProfile() {
+    Profile profile = new Profile("alexis");
+
+    Profile mockedProfile = new Profile("alexis");
+    given(profileRepository.save(profile)).willReturn(mockedProfile);
+
+    Profile savedProfile = profileService.saveProfile(profile);
+
+    assertThat(savedProfile.getUsername()).isEqualTo(mockedProfile.getUsername());
+  }
+
 }

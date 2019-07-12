@@ -29,10 +29,17 @@ public class ProfileRepositoryTest {
   @Test
   public void findByUsername_ShouldReturnProfile() {
     profileRepository.save(new Profile("alexis"));
-
     Profile profile = profileRepository.findByUsername("alexis");
-
     assertThat(profile.getUsername()).isEqualTo("alexis");
+  }
+
+  @Test
+  public void saveProfile_ShouldReturnProfile() {
+    String username = "random name";
+
+    Profile profile = profileRepository.saveProfile(new Profile(username));
+
+    assertThat(profile.getUsername()).isEqualTo(username);
   }
 
 }

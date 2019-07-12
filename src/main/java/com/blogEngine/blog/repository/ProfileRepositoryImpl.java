@@ -20,7 +20,7 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 
   @Override
   public Profile saveProfile(Profile profile) {
-    return null;
+    return mongoTemplate.save(profile);
   }
 
   @Override
