@@ -1,10 +1,11 @@
-package com.blogEngine.demo.controller;
+package com.blogEngine.blog.controller;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-import com.blogEngine.demo.BlogNotFoundException;
-import com.blogEngine.demo.BlogService;
-import com.blogEngine.demo.domain.Blog;
+import com.blogEngine.blog.domain.Blog;
+import com.blogEngine.blog.restExceptions.BlogNotFoundException;
+import com.blogEngine.blog.service.BlogService;
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("blogs")
+@RequestMapping(value = "blogs")
 public class BlogController {
 
   private final BlogService blogService;
@@ -32,8 +33,8 @@ public class BlogController {
     return blogService.getBlogByTitle(blogTitle);
   }
 
-  @PostMapping("")
-  private String postBlog(@RequestBody Blog blog) {
+  @PostMapping
+  private String postBlog(@Valid @RequestBody Blog blog) {
     blogService.saveBlog(blog);
     return HttpStatus.OK.toString();
   }
@@ -45,7 +46,7 @@ public class BlogController {
   }
 
   @PutMapping("/{blogTitle}")
-  private String putBlog(@RequestBody Blog newBlog,@PathVariable String blogTitle) {
+  private String putBlog(@RequestBody Blog newBlog, @PathVariable String blogTitle) {
     blogService.editBlogByTitle(newBlog, blogTitle);
     return HttpStatus.OK.toString();
   }

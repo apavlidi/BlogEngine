@@ -1,0 +1,40 @@
+package com.blogEngine.blog;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.blogEngine.blog.controller.ProfileController;
+import com.blogEngine.blog.domain.Profile;
+import com.blogEngine.blog.service.ProfileService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+@RunWith(SpringRunner.class)
+@WebMvcTest(ProfileController.class) //it only boots the component that is defined.
+public class ProfileControllerTest {
+
+  @Autowired
+  private MockMvc mockMvc;
+
+  @MockBean
+  private ProfileService profileService;
+
+  @Test
+  public void getProfile_ShouldReturnProfile() throws Exception {
+    given(profileService.getProfileByUsername(anyString())).willReturn(new Profile("alexis"));
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/profile/alexis"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("username").value("alexis"));
+  }
+
+
+}

@@ -1,4 +1,4 @@
-package com.blogEngine.demo;
+package com.blogEngine.blog;
 
 import org.junit.rules.ExternalResource;
 import org.springframework.data.mongodb.core.MongoTemplate;

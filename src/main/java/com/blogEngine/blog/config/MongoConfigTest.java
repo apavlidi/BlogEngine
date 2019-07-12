@@ -1,4 +1,6 @@
-package com.blogEngine.demo.config;
+package com.blogEngine.blog.config;
+
+import static com.blogEngine.blog.config.DatabaseProfiles.TEST;
 
 import com.mongodb.MongoClient;
 import org.springframework.context.annotation.Bean;
@@ -7,8 +9,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Configuration
-@Profile("dev")
-public class MongoConfig {
+@Profile(TEST)
+public class MongoConfigTest {
 
   @Bean
   public MongoClient mongo() {
@@ -16,8 +18,8 @@ public class MongoConfig {
   }
 
   @Bean
-  public MongoTemplate mongoTemplate() throws Exception {
-    return new MongoTemplate(mongo(), "blogEngine");
+  public MongoTemplate mongoTemplate() {
+    return new MongoTemplate(mongo(), "blogEngineTest");
   }
 
 }

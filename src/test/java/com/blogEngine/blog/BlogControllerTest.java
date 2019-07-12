@@ -1,12 +1,14 @@
-package com.blogEngine.demo;
+package com.blogEngine.blog;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.blogEngine.demo.controller.BlogController;
-import com.blogEngine.demo.domain.Blog;
+import com.blogEngine.blog.controller.BlogController;
+import com.blogEngine.blog.domain.Blog;
+import com.blogEngine.blog.restExceptions.BlogNotFoundException;
+import com.blogEngine.blog.service.BlogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import org.junit.Test;
@@ -20,7 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(BlogController.class)
+@WebMvcTest(BlogController.class) //it only boots the component that is defined.
 public class BlogControllerTest {
 
   @Autowired

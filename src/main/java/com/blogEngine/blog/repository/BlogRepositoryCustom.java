@@ -1,6 +1,6 @@
-package com.blogEngine.demo.repository;
+package com.blogEngine.blog.repository;
 
-import com.blogEngine.demo.domain.Blog;
+import com.blogEngine.blog.domain.Blog;
 
 
 public interface BlogRepositoryCustom {

@@ -1,6 +1,6 @@
-package com.blogEngine.demo.repository;
+package com.blogEngine.blog.repository;
 
-import com.blogEngine.demo.domain.Blog;
+import com.blogEngine.blog.domain.Blog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

@@ -1,11 +1,12 @@
-package com.blogEngine.demo;
+package com.blogEngine.blog;
 
+import static com.blogEngine.blog.config.DatabaseProfiles.TEST;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.OK;
 
-import com.blogEngine.demo.domain.Blog;
-import com.blogEngine.demo.repository.BlogRepository;
+import com.blogEngine.blog.domain.Blog;
+import com.blogEngine.blog.repository.BlogRepository;
 import java.time.LocalDate;
-import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,9 +20,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-public class BlogEngineIT {
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) //it boots a server
+@ActiveProfiles(TEST)
+public class BlogIT {
 
   @Rule
   public final MongoCleanupRule cleanupRule = new MongoCleanupRule(this, Blog.class);
@@ -44,8 +45,9 @@ public class BlogEngineIT {
 
     ResponseEntity<Blog> response = restTemplate.getForEntity("/blogs/title", Blog.class);
 
-    Assertions.assertThat(response.getStatusCode()).isEqualTo(OK);
-    Assertions.assertThat(response.getBody().getText()).isEqualTo("test");
-    Assertions.assertThat(response.getBody().getDate()).isEqualTo(LocalDate.now().toString());
+    assertThat(response.getStatusCode()).isEqualTo(OK);
+    assertThat(response.getBody().getText()).isEqualTo("test");
+    assertThat(response.getBody().getDate()).isEqualTo(LocalDate.now().toString());
   }
+
 }

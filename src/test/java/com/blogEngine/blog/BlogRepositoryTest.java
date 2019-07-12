@@ -1,9 +1,10 @@
-package com.blogEngine.demo;
+package com.blogEngine.blog;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import com.blogEngine.demo.domain.Blog;
-import com.blogEngine.demo.repository.BlogRepository;
+import com.blogEngine.blog.domain.Blog;
+import com.blogEngine.blog.repository.BlogRepository;
 import java.time.LocalDate;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,14 +12,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@AutoConfigureDataMongo
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 public class BlogRepositoryTest {
 
   @Rule

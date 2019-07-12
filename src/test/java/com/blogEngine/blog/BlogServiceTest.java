@@ -1,24 +1,25 @@
-package com.blogEngine.demo;
+package com.blogEngine.blog;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import com.blogEngine.demo.domain.Blog;
-import com.blogEngine.demo.repository.BlogRepository;
+import com.blogEngine.blog.domain.Blog;
+import com.blogEngine.blog.repository.BlogRepository;
+import com.blogEngine.blog.restExceptions.BlogNotFoundException;
+import com.blogEngine.blog.service.BlogService;
 import java.time.LocalDate;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+@SpringBootTest(webEnvironment = RANDOM_PORT)
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class BlogServiceTest {
 
   @Rule
@@ -32,10 +33,6 @@ public class BlogServiceTest {
 
   @Autowired
   private BlogService blogService;
-
-  @Before
-  public void setup() {
-  }
 
   @Test
   public void getBlogDetails_returnBlogInfo() {
