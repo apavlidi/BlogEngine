@@ -41,10 +41,16 @@ public class ProfileControllerTest {
 
   @Test
   public void postProfile_ShouldReturnStatusOK() throws Exception {
-    mockMvc.perform(
-        MockMvcRequestBuilders.post("/profile").content(asJsonString(new Profile("alexis")))
-            .contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(MockMvcRequestBuilders.post("/profile").content(asJsonString(new Profile("alexis")))
+        .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  public void postInvalidProfile_ShouldReturnBadRequest() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/profile").content(asJsonString(new Profile(".")))
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
   }
 
   @Test

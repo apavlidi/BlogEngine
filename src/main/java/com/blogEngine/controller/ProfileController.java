@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.restExceptions.ProfileNotFoundException;
 import com.blogEngine.service.ProfileService;
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,7 +33,7 @@ public class ProfileController {
   }
 
   @PostMapping
-  private String postProfile(@RequestBody Profile profile) {
+  private String postProfile(@Valid @RequestBody Profile profile) {
     profileService.saveProfile(profile);
     return HttpStatus.OK.toString();
   }
