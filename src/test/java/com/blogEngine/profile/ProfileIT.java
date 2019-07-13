@@ -48,4 +48,17 @@ public class ProfileIT {
     assertThat(response.getBody().getUsername()).isEqualTo("alexis");
   }
 
+  @Test
+  public void deleteProfile_shouldReturnReturnStatusOk() {
+    Profile profile = new Profile();
+    profile.setUsername("alexis");
+    profileRepository.save(profile);
+
+    restTemplate.delete("/profile/alexis", Profile.class);
+
+    Profile profileDeleted = profileRepository.findByUsername("alexis");
+
+    assertThat(profileDeleted).isEqualTo(null);
+  }
+
 }

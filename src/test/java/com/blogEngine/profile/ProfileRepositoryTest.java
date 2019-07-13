@@ -43,4 +43,12 @@ public class ProfileRepositoryTest {
     assertThat(profile.getUsername()).isEqualTo(username);
   }
 
+  @Test
+  public void deleteProfile_ShouldReturnDeletedProfile() {
+    profileRepository.save(new Profile("alexis"));
+    Profile deletedProfile = profileRepository.deleteProfile("alexis");
+
+    assertThat(deletedProfile.getUsername()).isEqualTo("alexis");
+  }
+
 }

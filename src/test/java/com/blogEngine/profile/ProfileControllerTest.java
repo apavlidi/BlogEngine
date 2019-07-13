@@ -56,4 +56,10 @@ public class ProfileControllerTest {
         .andExpect(status().isNotFound());
   }
 
+  @Test
+  public void deleteProfile_ShouldReturnStatusOK() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.delete("/profile/alexis"))
+        .andExpect(status().isOk());
+  }
+
 }

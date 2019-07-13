@@ -25,6 +25,8 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
 
   @Override
   public Profile deleteProfile(String username) {
-    return null;
+    Query query = new Query();
+    query.addCriteria(Criteria.where("username").is(username));
+    return mongoTemplate.findAndRemove(query, Profile.class);
   }
 }

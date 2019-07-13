@@ -46,4 +46,15 @@ public class ProfileServiceTest {
     assertThat(savedProfile.getUsername()).isEqualTo(mockedProfile.getUsername());
   }
 
+  @Test
+  public void deleteProfile_shouldReturnDeletedProfile() {
+
+    Profile mockedProfile = new Profile("alexis");
+    given(profileRepository.deleteProfile("alexis")).willReturn(mockedProfile);
+
+    Profile deletedProfile = profileService.deleteProfile("alexis");
+
+    assertThat(deletedProfile.getUsername()).isEqualTo("alexis");
+  }
+
 }

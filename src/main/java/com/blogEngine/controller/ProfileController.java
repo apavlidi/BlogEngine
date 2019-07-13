@@ -6,6 +6,7 @@ import com.blogEngine.domain.Profile;
 import com.blogEngine.restExceptions.ProfileNotFoundException;
 import com.blogEngine.service.ProfileService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,12 @@ public class ProfileController {
   @PostMapping
   private String postProfile(@RequestBody Profile profile) {
     profileService.saveProfile(profile);
+    return HttpStatus.OK.toString();
+  }
+
+  @DeleteMapping("/{username}")
+  private String deleteProfile(@PathVariable String username) {
+    profileService.deleteProfile(username);
     return HttpStatus.OK.toString();
   }
 
