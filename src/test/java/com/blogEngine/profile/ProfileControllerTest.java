@@ -1,4 +1,4 @@
-package com.blogEngine.blog;
+package com.blogEngine.profile;
 
 import static com.blogEngine.blog.BlogControllerTest.asJsonString;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -6,9 +6,10 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.blogEngine.blog.controller.ProfileController;
-import com.blogEngine.blog.domain.Profile;
-import com.blogEngine.blog.service.ProfileService;
+import com.blogEngine.controller.ProfileController;
+import com.blogEngine.domain.Profile;
+import com.blogEngine.restExceptions.ProfileNotFoundException;
+import com.blogEngine.service.ProfileService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,15 @@ public class ProfileControllerTest {
         MockMvcRequestBuilders.post("/profile").content(asJsonString(new Profile("alexis")))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
+  }
+
+  @Test
+  public void getNonExistenProfile_ShouldReturnNotFound() throws Exception {
+    given(profileService.getProfileByUsername(anyString()))
+        .willThrow(new ProfileNotFoundException());
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/profile/nonexistant"))
+        .andExpect(status().isNotFound());
   }
 
 }

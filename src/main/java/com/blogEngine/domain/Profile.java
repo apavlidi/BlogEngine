@@ -1,4 +1,4 @@
-package com.blogEngine.blog.domain;
+package com.blogEngine.domain;
 
 import java.util.List;
 import javax.validation.constraints.NotNull;

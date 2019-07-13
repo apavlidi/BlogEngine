@@ -1,10 +1,11 @@
-package com.blogEngine.blog;
+package com.blogEngine.profile;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import com.blogEngine.blog.domain.Profile;
-import com.blogEngine.blog.repository.ProfileRepository;
+import com.blogEngine.MongoCleanupRule;
+import com.blogEngine.domain.Profile;
+import com.blogEngine.repository.ProfileRepository;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

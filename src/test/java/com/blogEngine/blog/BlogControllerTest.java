@@ -5,10 +5,10 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.blogEngine.blog.controller.BlogController;
-import com.blogEngine.blog.domain.Blog;
-import com.blogEngine.blog.restExceptions.BlogNotFoundException;
-import com.blogEngine.blog.service.BlogService;
+import com.blogEngine.controller.BlogController;
+import com.blogEngine.domain.Blog;
+import com.blogEngine.restExceptions.BlogNotFoundException;
+import com.blogEngine.service.BlogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.blogEngine.blog.restExceptions;
+package com.blogEngine.restExceptions;
 
 public class BlogNotFoundException extends RuntimeException {
 

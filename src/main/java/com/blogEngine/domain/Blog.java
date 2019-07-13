@@ -1,4 +1,4 @@
-package com.blogEngine.blog.domain;
+package com.blogEngine.domain;
 
 import java.time.LocalDate;
 import javax.validation.constraints.NotNull;

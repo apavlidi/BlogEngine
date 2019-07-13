@@ -1,11 +1,12 @@
 package com.blogEngine.blog;
 
-import static com.blogEngine.blog.config.DatabaseProfiles.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.OK;
 
-import com.blogEngine.blog.domain.Blog;
-import com.blogEngine.blog.repository.BlogRepository;
+import com.blogEngine.MongoCleanupRule;
+import com.blogEngine.config.DatabaseProfiles;
+import com.blogEngine.domain.Blog;
+import com.blogEngine.repository.BlogRepository;
 import java.time.LocalDate;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) //it boots a server
-@ActiveProfiles(TEST)
+@ActiveProfiles(DatabaseProfiles.TEST)
 public class BlogIT {
 
   @Rule

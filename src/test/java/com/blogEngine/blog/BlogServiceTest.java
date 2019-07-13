@@ -4,10 +4,11 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import com.blogEngine.blog.domain.Blog;
-import com.blogEngine.blog.repository.BlogRepository;
-import com.blogEngine.blog.restExceptions.BlogNotFoundException;
-import com.blogEngine.blog.service.BlogService;
+import com.blogEngine.MongoCleanupRule;
+import com.blogEngine.domain.Blog;
+import com.blogEngine.repository.BlogRepository;
+import com.blogEngine.restExceptions.BlogNotFoundException;
+import com.blogEngine.service.BlogService;
 import java.time.LocalDate;
 import org.junit.Rule;
 import org.junit.Test;

@@ -1,11 +1,12 @@
-package com.blogEngine.blog;
+package com.blogEngine.profile;
 
-import static com.blogEngine.blog.config.DatabaseProfiles.TEST;
+import static com.blogEngine.config.DatabaseProfiles.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.OK;
 
-import com.blogEngine.blog.domain.Profile;
-import com.blogEngine.blog.repository.ProfileRepository;
+import com.blogEngine.MongoCleanupRule;
+import com.blogEngine.domain.Profile;
+import com.blogEngine.repository.ProfileRepository;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

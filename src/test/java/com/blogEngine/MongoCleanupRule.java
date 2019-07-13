@@ -1,4 +1,4 @@
-package com.blogEngine.blog;
+package com.blogEngine;
 
 import org.junit.rules.ExternalResource;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,7 +19,7 @@ public class MongoCleanupRule extends ExternalResource {
    * @param testClassInstance the test class instance itself.
    * @param collectionClasses the entity classes representing the collections to clean.
    */
-  MongoCleanupRule(final Object testClassInstance, final Class<?>... collectionClasses) {
+  public MongoCleanupRule(final Object testClassInstance, final Class<?>... collectionClasses) {
     this(testClassInstance, "mongoTemplate", "getMongoTemplate", collectionClasses);
   }
 

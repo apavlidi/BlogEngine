@@ -1,8 +1,8 @@
-package com.blogEngine.blog.service;
+package com.blogEngine.service;
 
-import com.blogEngine.blog.domain.Blog;
-import com.blogEngine.blog.repository.BlogRepository;
-import com.blogEngine.blog.restExceptions.BlogNotFoundException;
+import com.blogEngine.domain.Blog;
+import com.blogEngine.repository.BlogRepository;
+import com.blogEngine.restExceptions.BlogNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service

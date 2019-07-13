@@ -1,7 +1,8 @@
-package com.blogEngine.blog.service;
+package com.blogEngine.service;
 
-import com.blogEngine.blog.domain.Profile;
-import com.blogEngine.blog.repository.ProfileRepository;
+import com.blogEngine.domain.Profile;
+import com.blogEngine.repository.ProfileRepository;
+import com.blogEngine.restExceptions.ProfileNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,11 @@ public class ProfileService {
   private ProfileRepository profileRepository;
 
   public Profile getProfileByUsername(String username) {
-    return profileRepository.findByUsername(username);
+    Profile profile = profileRepository.findByUsername(username);
+    if (profile == null) {
+      throw new ProfileNotFoundException();
+    }
+    return profile;
   }
 
   public Profile saveProfile(Profile profile) {

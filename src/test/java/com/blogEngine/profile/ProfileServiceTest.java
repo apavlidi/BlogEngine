@@ -1,13 +1,13 @@
-package com.blogEngine.blog;
+package com.blogEngine.profile;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import com.blogEngine.blog.domain.Profile;
-import com.blogEngine.blog.repository.ProfileRepository;
-import com.blogEngine.blog.service.ProfileService;
+import com.blogEngine.domain.Profile;
+import com.blogEngine.repository.ProfileRepository;
+import com.blogEngine.service.ProfileService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,10 @@
-package com.blogEngine.blog.controller;
+package com.blogEngine.controller;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-import com.blogEngine.blog.domain.Blog;
-import com.blogEngine.blog.restExceptions.BlogNotFoundException;
-import com.blogEngine.blog.service.BlogService;
+import com.blogEngine.domain.Blog;
+import com.blogEngine.restExceptions.BlogNotFoundException;
+import com.blogEngine.service.BlogService;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;

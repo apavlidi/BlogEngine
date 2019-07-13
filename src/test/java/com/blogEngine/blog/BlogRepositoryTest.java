@@ -3,8 +3,9 @@ package com.blogEngine.blog;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-import com.blogEngine.blog.domain.Blog;
-import com.blogEngine.blog.repository.BlogRepository;
+import com.blogEngine.MongoCleanupRule;
+import com.blogEngine.domain.Blog;
+import com.blogEngine.repository.BlogRepository;
 import java.time.LocalDate;
 import org.junit.Rule;
 import org.junit.Test;

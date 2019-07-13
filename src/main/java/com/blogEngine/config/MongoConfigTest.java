@@ -1,6 +1,4 @@
-package com.blogEngine.blog.config;
-
-import static com.blogEngine.blog.config.DatabaseProfiles.TEST;
+package com.blogEngine.config;
 
 import com.mongodb.MongoClient;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Configuration
-@Profile(TEST)
+@Profile(DatabaseProfiles.TEST)
 public class MongoConfigTest {
 
   @Bean

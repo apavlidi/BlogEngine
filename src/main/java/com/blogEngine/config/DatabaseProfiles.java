@@ -1,4 +1,4 @@
-package com.blogEngine.blog.config;
+package com.blogEngine.config;
 
 public class DatabaseProfiles {
 
