@@ -22,7 +22,6 @@ public class BlogService {
     return blog;
   }
 
-
   public Blog saveBlog(Blog blog) {
     return blogRepository.saveBlog(blog);
   }

@@ -2,7 +2,9 @@ package com.blogEngine.domain;
 
 import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,16 +13,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Blog {
 
   @Id
+  @Null
   private String id;
 
   @NotNull
   @Size(min = 2, message = "Title should have at least 2 characters")
   private String title;
 
+  @Size(min = 1, message = "Text should have at least 1 character")
   private String text;
 
+  @CreatedDate
   private LocalDate date;
 
+  @NotNull
   private Profile profile;
 
   public Blog() {
@@ -67,10 +73,6 @@ public class Blog {
 
   public String getId() {
     return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
   }
 
   public String getTitle() {
