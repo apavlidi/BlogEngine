@@ -2,6 +2,8 @@ package com.blogEngine.profile;
 
 import static com.blogEngine.config.DatabaseProfiles.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 import com.blogEngine.MongoCleanupRule;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -67,13 +70,26 @@ public class ProfileIT {
     profile.setUsername("alexis");
     profileRepository.save(profile);
 
-    restTemplate.put("/profile/alexis", new Profile("babis"));
+    restTemplate.put("/profile/alexis", new Profile("test"));
 
     Profile oldProfile = profileRepository.findByUsername("alexis");
-    Profile newProfile = profileRepository.findByUsername("babis");
+    Profile newProfile = profileRepository.findByUsername("test");
 
-    assertThat(oldProfile.getUsername()).isEqualTo(null);
+    assertThat(oldProfile).isEqualTo(null);
+    assertThat(newProfile).isNotEqualTo(null);
     assertThat(newProfile.getUsername()).isNotEqualTo(null);
+    assertThat(newProfile.getUsername()).isEqualTo("test");
+  }
+
+  @Test
+  public void updateNonProfile_shouldReturnNotFound() {
+    Profile profileToBeUpdated = new Profile("alexis");
+    HttpEntity<Profile> profileHttpEntity = new HttpEntity<>(profileToBeUpdated);
+
+    ResponseEntity<Profile> exchange = restTemplate
+        .exchange("/profile/alexis", PUT, profileHttpEntity, Profile.class);
+
+    assertThat(exchange.getStatusCode()).isEqualTo(NOT_FOUND);
   }
 
 }

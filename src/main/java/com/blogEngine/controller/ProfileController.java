@@ -7,6 +7,7 @@ import com.blogEngine.restExceptions.ProfileNotFoundException;
 import com.blogEngine.service.ProfileService;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,7 @@ public class ProfileController {
     return HttpStatus.OK.toString();
   }
 
-  @PutMapping(value = "/{username}", produces = "application/json")
+  @PutMapping(value = "/{username}", produces = {MediaType.APPLICATION_JSON_VALUE})
   private Profile updateProfile(@RequestBody Profile profile, @PathVariable String username) {
     return profileService.updateProfile(username, profile);
   }

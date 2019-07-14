@@ -29,6 +29,11 @@ public class ProfileService {
   }
 
   public Profile updateProfile(String username, Profile newProfile) {
-    return null;
+    Profile updatedProfile = profileRepository.updateProfile(username, newProfile);
+    if (updatedProfile == null) {
+      throw new ProfileNotFoundException();
+    }
+    return updatedProfile;
   }
+
 }

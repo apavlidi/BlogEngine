@@ -10,4 +10,5 @@ public interface ProfileRepositoryCustom {
 
   Profile deleteProfile(String username);
 
+  Profile updateProfile(String username, Profile profileToBeUpdated);
 }

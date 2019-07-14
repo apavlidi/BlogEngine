@@ -7,6 +7,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.ProfileRepository;
+import com.blogEngine.restExceptions.ProfileNotFoundException;
 import com.blogEngine.service.ProfileService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,5 +57,29 @@ public class ProfileServiceTest {
 
     assertThat(deletedProfile.getUsername()).isEqualTo("alexis");
   }
+
+  @Test
+  public void updateProfile_shouldReturnUpdatedProfile() {
+    Profile profileToBeUpdated = new Profile("updated");
+
+    Profile mockedUpdatedProfile = new Profile("updated");
+    given(profileRepository.updateProfile("alexis", profileToBeUpdated))
+        .willReturn(mockedUpdatedProfile);
+
+    Profile updateProfile = profileService.updateProfile("alexis", profileToBeUpdated);
+
+    assertThat(updateProfile.getUsername()).isNotNull();
+    assertThat(updateProfile.getUsername()).isEqualTo(mockedUpdatedProfile.getUsername());
+  }
+
+  @Test(expected = ProfileNotFoundException.class)
+  public void updateNotExistentProfile_shouldReturnProfileNotFoundException() {
+    Profile profileToBeUpdated = new Profile("updated");
+
+    given(profileRepository.updateProfile("alexis", profileToBeUpdated)).willReturn(null);
+
+    profileService.updateProfile("alexis", profileToBeUpdated);
+  }
+
 
 }

@@ -1,8 +1,10 @@
 package com.blogEngine.profile;
 
 import static com.blogEngine.blog.BlogControllerTest.asJsonString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -15,11 +17,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringRunner.class)
@@ -47,7 +46,7 @@ public class ProfileControllerTest {
   public void postProfile_ShouldReturnStatusOK() throws Exception {
     mockMvc.perform(
         MockMvcRequestBuilders.post(BASE_PROFILE_URL).content(asJsonString(new Profile("alexis")))
-            .contentType(MediaType.APPLICATION_JSON))
+            .contentType(APPLICATION_JSON))
         .andExpect(status().isOk());
   }
 
@@ -55,7 +54,7 @@ public class ProfileControllerTest {
   public void postInvalidProfile_ShouldReturnBadRequest() throws Exception {
     mockMvc.perform(
         MockMvcRequestBuilders.post(BASE_PROFILE_URL).content(asJsonString(new Profile(".")))
-            .contentType(MediaType.APPLICATION_JSON))
+            .contentType(APPLICATION_JSON))
         .andExpect(status().isBadRequest());
   }
 
@@ -78,20 +77,26 @@ public class ProfileControllerTest {
   public void updateProfile_ShouldReturnProfile() throws Exception {
     Profile newProfile = new Profile("babis");
 
-    //given(profileService.updateProfile("alexis", newProfile))
-    //   .willReturn(new Profile(""));
+    given(profileService.updateProfile(anyString(), any(Profile.class)))
+        .willReturn(new Profile("test"));
 
-    ResultActions resultActions = mockMvc
-        .perform(MockMvcRequestBuilders.put(BASE_PROFILE_URL + "/alexis")
-            .content(asJsonString(newProfile))
-            .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("username").value("babis"))
+    mockMvc.perform(MockMvcRequestBuilders.put(BASE_PROFILE_URL + "/alexis")
+        .content(asJsonString(newProfile))
+        .contentType(APPLICATION_JSON))
+        .andExpect(jsonPath("username").value("test"))
         .andExpect(status().isOk());
-    MvcResult result = resultActions.andReturn();
-    String contentAsString = result.getResponse().getContentAsString();
+  }
 
-    System.out.println();
+  @Test
+  public void updateNonProfile_shouldReturnNotFound() throws Exception {
+    Profile newProfile = new Profile("babis");
 
+    given(profileService.updateProfile(anyString(), any(Profile.class)))
+        .willThrow(new ProfileNotFoundException());
+
+    mockMvc.perform(
+        MockMvcRequestBuilders.put(BASE_PROFILE_URL + "/alexis").content(asJsonString(newProfile))
+            .contentType(APPLICATION_JSON)).andExpect(status().isNotFound());
   }
 
 }

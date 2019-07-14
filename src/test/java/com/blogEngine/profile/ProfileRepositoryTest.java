@@ -51,4 +51,23 @@ public class ProfileRepositoryTest {
     assertThat(deletedProfile.getUsername()).isEqualTo("alexis");
   }
 
+  @Test
+  public void updateProfile_shouldReturnUpdatedProfile() {
+    profileRepository.save(new Profile("alexis"));
+
+    Profile profileToBeUpdated = new Profile("updated username");
+    Profile updatedProfile = profileRepository.updateProfile("alexis", profileToBeUpdated);
+
+    assertThat(updatedProfile.getUsername()).isEqualTo(profileToBeUpdated.getUsername());
+  }
+
+  @Test
+  public void updateOfNotExistentProfile_shouldReturnNull() {
+    Profile profileToBeUpdated = new Profile("updated username");
+    Profile updatedProfile = profileRepository.updateProfile("alexis", profileToBeUpdated);
+
+    assertThat(updatedProfile).isEqualTo(null);
+  }
+
+
 }
