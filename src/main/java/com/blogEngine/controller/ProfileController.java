@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,10 +45,14 @@ public class ProfileController {
     return HttpStatus.OK.toString();
   }
 
+  @PutMapping(value = "/{username}", produces = "application/json")
+  private Profile updateProfile(@RequestBody Profile profile, @PathVariable String username) {
+    return profileService.updateProfile(username, profile);
+  }
+
   @ExceptionHandler
   @ResponseStatus(NOT_FOUND)
   private void profileNotFoundException(ProfileNotFoundException ex) {
-
   }
 
 }

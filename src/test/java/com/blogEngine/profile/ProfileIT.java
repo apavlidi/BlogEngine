@@ -49,7 +49,7 @@ public class ProfileIT {
   }
 
   @Test
-  public void deleteProfile_shouldReturnReturnStatusOk() {
+  public void deleteProfile_shouldReturnStatusOk() {
     Profile profile = new Profile();
     profile.setUsername("alexis");
     profileRepository.save(profile);
@@ -59,6 +59,21 @@ public class ProfileIT {
     Profile profileDeleted = profileRepository.findByUsername("alexis");
 
     assertThat(profileDeleted).isEqualTo(null);
+  }
+
+  @Test
+  public void updateProfile_shouldReturnUpdatedProfileDetails() {
+    Profile profile = new Profile();
+    profile.setUsername("alexis");
+    profileRepository.save(profile);
+
+    restTemplate.put("/profile/alexis", new Profile("babis"));
+
+    Profile oldProfile = profileRepository.findByUsername("alexis");
+    Profile newProfile = profileRepository.findByUsername("babis");
+
+    assertThat(oldProfile.getUsername()).isEqualTo(null);
+    assertThat(newProfile.getUsername()).isNotEqualTo(null);
   }
 
 }

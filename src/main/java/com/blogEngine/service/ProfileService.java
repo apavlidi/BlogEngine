@@ -27,4 +27,8 @@ public class ProfileService {
   public Profile deleteProfile(String username) {
     return profileRepository.deleteProfile(username);
   }
+
+  public Profile updateProfile(String username, Profile newProfile) {
+    return null;
+  }
 }
