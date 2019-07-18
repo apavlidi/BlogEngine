@@ -5,8 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.blogEngine.MongoCleanupRule;
+import com.blogEngine.domain.Blog;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.ProfileRepository;
 import org.junit.Rule;
@@ -90,6 +94,43 @@ public class ProfileIT {
         .exchange("/profile/alexis", PUT, profileHttpEntity, Profile.class);
 
     assertThat(exchange.getStatusCode()).isEqualTo(NOT_FOUND);
+  }
+
+  @Test
+  public void postProfileWithBlogs_shouldReturnStatusOK() {
+    //setup
+    Profile tempProfile = new Profile("tempUsername");
+    List<Blog> tempBlogs = new ArrayList<>();
+    Blog tempBlog = new Blog("test title");
+
+    tempBlog.setText("test text");
+    tempBlog.setProfile(tempProfile);
+    tempBlogs.add(tempBlog);
+    tempProfile.setBlogs(tempBlogs);
+
+    //act
+    ResponseEntity<String> response = restTemplate.postForEntity("/profile", tempProfile, String.class);
+
+    //assertions
+    assertThat(response.getStatusCode()).isEqualTo(OK);
+  }
+
+  @Test
+  public void postProfileWithInvalidBlogs_shouldReturnBadRequest() {
+    //setup
+    Profile tempProfile = new Profile("tempUsername");
+    List<Blog> tempBlogs = new ArrayList<>();
+    Blog tempBlog = new Blog();
+
+    tempBlog.setProfile(tempProfile);
+    tempBlogs.add(tempBlog);
+    tempProfile.setBlogs(tempBlogs);
+
+    //act
+    ResponseEntity<String> response = restTemplate.postForEntity("/profile", tempProfile, String.class);
+
+    //assertions
+    assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
   }
 
 }

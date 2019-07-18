@@ -94,6 +94,20 @@ public class BlogIT {
   }
 
   @Test
+  public void postBlogWithProfile_shouldReturnOK() {
+    //setup
+    Blog testBlog = new Blog("Some valid title");
+    testBlog.setText("Some valid text");
+    testBlog.setProfile(new Profile("testProfile"));
+
+    //act
+    ResponseEntity<String> response = restTemplate.postForEntity("/blogs", testBlog, String.class);
+
+    //assertions
+    assertThat(response.getStatusCode()).isEqualTo(OK);
+  }
+
+  @Test
   public void postBlogWithInvalidTitle_shouldReturnBadRequest() {
     //setup
 
