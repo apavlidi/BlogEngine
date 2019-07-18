@@ -47,6 +47,7 @@ public class BlogControllerTest {
     given(blogService.saveBlog(new Blog("test"))).willReturn(new Blog("test", LocalDate.now()));
 
     Blog mockBlog = new Blog("test");
+    mockBlog.setText("test text");
     mockBlog.setProfile(new Profile("testProfile"));
 
     mockMvc.perform(MockMvcRequestBuilders.post("/blogs")
