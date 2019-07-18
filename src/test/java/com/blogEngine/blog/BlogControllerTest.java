@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.blogEngine.controller.BlogController;
 import com.blogEngine.domain.Blog;
+import com.blogEngine.domain.Profile;
 import com.blogEngine.restExceptions.BlogNotFoundException;
 import com.blogEngine.service.BlogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,8 +46,12 @@ public class BlogControllerTest {
   public void postBlog_ShouldReturnStatusOK() throws Exception {
     given(blogService.saveBlog(new Blog("test"))).willReturn(new Blog("test", LocalDate.now()));
 
+    Blog mockBlog = new Blog("test");
+    mockBlog.setText("test text");
+    mockBlog.setProfile(new Profile("testProfile"));
+
     mockMvc.perform(MockMvcRequestBuilders.post("/blogs")
-        .content(asJsonString(new Blog("test")))
+        .content(asJsonString(mockBlog))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
