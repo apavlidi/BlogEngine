@@ -11,6 +11,8 @@ import com.blogEngine.domain.Blog;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.BlogRepository;
 import java.time.LocalDate;
+import java.util.Objects;
+import javax.validation.constraints.Size;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Rule;
@@ -34,6 +36,7 @@ public class BlogIT {
 
   @Rule
   public final MongoCleanupRule cleanupRule = new MongoCleanupRule(this, Blog.class);
+  private final String BASE_BLOG_URL = "/blogs";
 
   @Autowired
   private TestRestTemplate restTemplate;
@@ -51,10 +54,10 @@ public class BlogIT {
     blog.setText("test");
     blogRepository.saveBlog(blog);
 
-    ResponseEntity<Blog> response = restTemplate.getForEntity("/blogs/title", Blog.class);
+    ResponseEntity<Blog> response = restTemplate.getForEntity(BASE_BLOG_URL + "/title", Blog.class);
 
     assertThat(response.getStatusCode()).isEqualTo(OK);
-    assertThat(response.getBody().getText()).isEqualTo("test");
+    assertThat(Objects.requireNonNull(response.getBody()).getText()).isEqualTo("test");
     assertThat(response.getBody().getDate()).isEqualTo(LocalDate.now().toString());
   }
 
@@ -74,47 +77,133 @@ public class BlogIT {
 
     HttpEntity<String> request = new HttpEntity<>(blogJsonObject.toString(), headers);
     ResponseEntity<String> response = restTemplate
-        .postForEntity("/blogs", request, String.class);
+        .postForEntity(BASE_BLOG_URL, request, String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
   }
 
   @Test
   public void postBlogWithInvalidProfile_shouldReturnBadRequest() {
-    //setup
     Blog invalidBlog = new Blog("Some valid title");
     invalidBlog.setText("Some valid text");
     invalidBlog.setProfile(new Profile());
 
-    //act
-    ResponseEntity<String> response = restTemplate.postForEntity("/blogs", invalidBlog, String.class);
+    ResponseEntity<String> response = restTemplate
+        .postForEntity(BASE_BLOG_URL, invalidBlog, String.class);
 
-    //assertions
     assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
   }
 
   @Test
   public void postBlogWithProfile_shouldReturnOK() {
-    //setup
     Blog testBlog = new Blog("Some valid title");
     testBlog.setText("Some valid text");
     testBlog.setProfile(new Profile("testProfile"));
 
-    //act
-    ResponseEntity<String> response = restTemplate.postForEntity("/blogs", testBlog, String.class);
+    ResponseEntity<String> response = restTemplate
+        .postForEntity(BASE_BLOG_URL, testBlog, String.class);
 
-    //assertions
     assertThat(response.getStatusCode()).isEqualTo(OK);
   }
 
   @Test
-  public void postBlogWithInvalidTitle_shouldReturnBadRequest() {
-    //setup
+  public void postBlogWithNoTitle_shouldReturnBadRequest() {
+    Blog blog = new Blog();
 
-    //act
+    ResponseEntity<Blog> response = restTemplate
+        .postForEntity(BASE_BLOG_URL, blog, Blog.class);
 
-    //assertions
+    assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
+  }
 
+  @Test
+  public void postBlogWithLessThanMinTitle_shouldReturnBadRequest() throws NoSuchFieldException {
+    Blog blog = new Blog();
+
+    int minTitleLength = getSizePropertyForTitleAnnotation("title", "min");
+    String title = getStringWithLength(minTitleLength - 1);
+    blog.setTitle(title);
+    blog.setText("test");
+
+    ResponseEntity<Blog> response = restTemplate
+        .postForEntity(BASE_BLOG_URL, blog, Blog.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
+  }
+
+  @Test
+  public void postBlogWithMoreThanMaxTitle_shouldReturnBadRequest() throws NoSuchFieldException {
+    Blog blog = new Blog();
+
+    int maxTitleLength = getSizePropertyForTitleAnnotation("title", "max");
+    String title = getStringWithLength(maxTitleLength + 1);
+    blog.setTitle(title);
+    blog.setText("test");
+
+    ResponseEntity<Blog> response = restTemplate
+        .postForEntity(BASE_BLOG_URL, blog, Blog.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
+  }
+
+  @Test
+  public void postBlogWithLessThanMinText_shouldReturnBadRequest() throws NoSuchFieldException {
+    Blog blog = new Blog();
+
+    int minTextLength = getSizePropertyForTitleAnnotation("text", "min");
+    String text = getStringWithLength(minTextLength - 1);
+    blog.setTitle("thats a correct title");
+    blog.setText(text);
+
+    ResponseEntity<Blog> response = restTemplate
+        .postForEntity(BASE_BLOG_URL, blog, Blog.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
+  }
+
+  @Test
+  public void postBlogWithoutProfile_shouldReturnBadRequest() {
+    Blog blog = new Blog();
+
+    blog.setTitle("thats a correct title");
+    blog.setText("thats another correct text");
+
+    ResponseEntity<Blog> response = restTemplate
+        .postForEntity(BASE_BLOG_URL, blog, Blog.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
+  }
+
+
+  @Test
+  public void postBlogWithoutValidProfile_shouldReturnBadRequest() {
+    Blog blog = new Blog();
+    Profile profile = new Profile();
+
+    blog.setProfile(profile);
+    blog.setTitle("thats a correct title");
+    blog.setText("thats another correct text");
+
+    ResponseEntity<Blog> response = restTemplate
+        .postForEntity(BASE_BLOG_URL, blog, Blog.class);
+
+    assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
+  }
+
+  private int getSizePropertyForTitleAnnotation(String field, String property)
+      throws NoSuchFieldException {
+    Class<?> blogClass = Blog.class;
+    Size annotation = blogClass.getDeclaredField(field).getAnnotation(Size.class);
+    return property.equals("max") ? annotation.max() : annotation.min();
+  }
+
+  private String getStringWithLength(int maxTitleLength) {
+    StringBuilder title = new StringBuilder();
+    for (int i = 0; i < maxTitleLength; i++) {
+      title.append("0");
+    }
+
+    return String.valueOf(title);
   }
 
 }

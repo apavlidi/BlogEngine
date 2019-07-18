@@ -3,16 +3,18 @@ package com.blogEngine.profile;
 import static com.blogEngine.config.DatabaseProfiles.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.blogEngine.MongoCleanupRule;
-import com.blogEngine.domain.Blog;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.ProfileRepository;
+import java.util.Objects;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -52,7 +55,7 @@ public class ProfileIT {
     ResponseEntity<Profile> response = restTemplate.getForEntity("/profile/alexis", Profile.class);
 
     assertThat(response.getStatusCode()).isEqualTo(OK);
-    assertThat(response.getBody().getUsername()).isEqualTo("alexis");
+    assertThat(Objects.requireNonNull(response.getBody()).getUsername()).isEqualTo("alexis");
   }
 
   @Test
@@ -97,39 +100,18 @@ public class ProfileIT {
   }
 
   @Test
-  public void postProfileWithBlogs_shouldReturnStatusOK() {
-    //setup
-    Profile tempProfile = new Profile("tempUsername");
-    List<Blog> tempBlogs = new ArrayList<>();
-    Blog tempBlog = new Blog("test title");
+  @Ignore
+  public void postProfileWithNoneExistentParameters_shouldReturnBadRequest() throws JSONException {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(APPLICATION_JSON);
+    JSONObject profileJsonObject = new JSONObject();
+    profileJsonObject.put("fake_field1", "fake none existent field");
+    profileJsonObject.put("username", "testUser");
 
-    tempBlog.setText("test text");
-    tempBlog.setProfile(tempProfile);
-    tempBlogs.add(tempBlog);
-    tempProfile.setBlogs(tempBlogs);
+    HttpEntity<String> request = new HttpEntity<>(profileJsonObject.toString(), headers);
+    ResponseEntity<String> response = restTemplate
+        .postForEntity("/profile", request, String.class);
 
-    //act
-    ResponseEntity<String> response = restTemplate.postForEntity("/profile", tempProfile, String.class);
-
-    //assertions
-    assertThat(response.getStatusCode()).isEqualTo(OK);
-  }
-
-  @Test
-  public void postProfileWithInvalidBlogs_shouldReturnBadRequest() {
-    //setup
-    Profile tempProfile = new Profile("tempUsername");
-    List<Blog> tempBlogs = new ArrayList<>();
-    Blog tempBlog = new Blog();
-
-    tempBlog.setProfile(tempProfile);
-    tempBlogs.add(tempBlog);
-    tempProfile.setBlogs(tempBlogs);
-
-    //act
-    ResponseEntity<String> response = restTemplate.postForEntity("/profile", tempProfile, String.class);
-
-    //assertions
     assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
   }
 

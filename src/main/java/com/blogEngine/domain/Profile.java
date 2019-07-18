@@ -1,11 +1,8 @@
 package com.blogEngine.domain;
 
-import java.util.List;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,23 +22,11 @@ public class Profile {
 
   private String lastName;
 
-  // TODO: List needs to be validated!
-  private List<Blog> blogs;
-
   public Profile() {
   }
 
   public Profile(String username) {
     this.username = username;
-  }
-
-  @JsonBackReference
-  public List<Blog> getBlogs() {
-    return blogs;
-  }
-
-  public void setBlogs(List<@Valid Blog> blogs) {
-    this.blogs = blogs;
   }
 
   public String getId() {
