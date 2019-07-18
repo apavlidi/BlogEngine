@@ -2,6 +2,7 @@ package com.blogEngine.domain;
 
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Profile {
 
   @Id
+  @Null
   private String id;
 
   @NotNull
@@ -40,10 +42,6 @@ public class Profile {
 
   public String getId() {
     return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
   }
 
   public String getUsername() {

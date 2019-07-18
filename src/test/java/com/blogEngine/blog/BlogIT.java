@@ -8,6 +8,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import com.blogEngine.MongoCleanupRule;
 import com.blogEngine.config.DatabaseProfiles;
 import com.blogEngine.domain.Blog;
+import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.BlogRepository;
 import java.time.LocalDate;
 import org.json.JSONException;
@@ -75,6 +76,20 @@ public class BlogIT {
     ResponseEntity<String> response = restTemplate
         .postForEntity("/blogs", request, String.class);
 
+    assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
+  }
+
+  @Test
+  public void postBlogWithInvalidProfile_shouldReturnBadRequest() {
+    //setup
+    Blog invalidBlog = new Blog("Some valid title");
+    invalidBlog.setText("Some valid text");
+    invalidBlog.setProfile(new Profile());
+
+    //act
+    ResponseEntity<String> response = restTemplate.postForEntity("/blogs", invalidBlog, String.class);
+
+    //assertions
     assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
   }
 
