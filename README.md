@@ -1,4 +1,4 @@
-# Blog Engine  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a72f9fb7f3984263b423fd1e3634e55c)](https://www.codacy.com/app/apavlidi/BlogEngine?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=apavlidi/BlogEngine&amp;utm_campaign=Badge_Grade)
+# Blog Engine  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a72f9fb7f3984263b423fd1e3634e55c)](https://www.codacy.com/app/apavlidi/BlogEngine?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=apavlidi/BlogEngine&amp;utm_campaign=Badge_Grade) [![Google Java Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 Blog Engine is a project that is completely built with Test Driven Development (TTD) and Pair Programming.
 The Project uses Spring Boot with Spring Data MongoDB, Maven, and JUnit 5.
 
