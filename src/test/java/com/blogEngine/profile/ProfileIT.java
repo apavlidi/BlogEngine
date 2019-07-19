@@ -46,13 +46,15 @@ public class ProfileIT {
   @Autowired
   private MongoTemplate mongoTemplate;
 
+  private String DOMAIN_PROFILE_URL = "/profile";
+
   @Test
   public void getProfile_shouldReturnProfileDetails() {
     Profile profile = new Profile();
     profile.setUsername("alexis");
     profileRepository.save(profile);
 
-    ResponseEntity<Profile> response = restTemplate.getForEntity("/profile/alexis", Profile.class);
+    ResponseEntity<Profile> response = restTemplate.getForEntity(DOMAIN_PROFILE_URL + "/alexis", Profile.class);
 
     assertThat(response.getStatusCode()).isEqualTo(OK);
     assertThat(Objects.requireNonNull(response.getBody()).getUsername()).isEqualTo("alexis");
@@ -64,7 +66,7 @@ public class ProfileIT {
     profile.setUsername("alexis");
     profileRepository.save(profile);
 
-    restTemplate.delete("/profile/alexis", Profile.class);
+    restTemplate.delete(DOMAIN_PROFILE_URL + "/alexis", Profile.class);
 
     Profile profileDeleted = profileRepository.findByUsername("alexis");
 
@@ -77,7 +79,7 @@ public class ProfileIT {
     profile.setUsername("alexis");
     profileRepository.save(profile);
 
-    restTemplate.put("/profile/alexis", new Profile("test"));
+    restTemplate.put(DOMAIN_PROFILE_URL + "/alexis", new Profile("test"));
 
     Profile oldProfile = profileRepository.findByUsername("alexis");
     Profile newProfile = profileRepository.findByUsername("test");
@@ -94,7 +96,7 @@ public class ProfileIT {
     HttpEntity<Profile> profileHttpEntity = new HttpEntity<>(profileToBeUpdated);
 
     ResponseEntity<Profile> exchange = restTemplate
-        .exchange("/profile/alexis", PUT, profileHttpEntity, Profile.class);
+        .exchange(DOMAIN_PROFILE_URL + "/alexis", PUT, profileHttpEntity, Profile.class);
 
     assertThat(exchange.getStatusCode()).isEqualTo(NOT_FOUND);
   }
@@ -110,7 +112,7 @@ public class ProfileIT {
 
     HttpEntity<String> request = new HttpEntity<>(profileJsonObject.toString(), headers);
     ResponseEntity<String> response = restTemplate
-        .postForEntity("/profile", request, String.class);
+        .postForEntity(DOMAIN_PROFILE_URL, request, String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
   }
