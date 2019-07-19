@@ -52,7 +52,7 @@ public class BlogController {
   }
 
   @PutMapping("/{blogTitle}")
-  private String putBlog(@RequestBody Blog newBlog, @PathVariable String blogTitle) {
+  private String putBlog(@Valid @RequestBody Blog newBlog, @PathVariable String blogTitle) {
     blogService.editBlogByTitle(newBlog, blogTitle);
     return HttpStatus.OK.toString();
   }

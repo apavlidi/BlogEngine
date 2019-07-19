@@ -19,7 +19,7 @@ You can download MongoDB here: https://www.mongodb.com/what-is-mongodb
 The application is currently in development and its not yet fully implemented.
 
 ### Run the Test Suite:
-`mvn test -Pfailsafe` 
+`mvn verify -Pfailsafe` 
 
 
 ### Deploy the Application

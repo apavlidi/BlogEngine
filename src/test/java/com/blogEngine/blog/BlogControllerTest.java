@@ -69,8 +69,12 @@ public class BlogControllerTest {
 
   @Test
   public void putBlog_ShouldReturnStatusOK() throws Exception {
+    Blog blog = new Blog("test");
+    blog.setProfile(new Profile("alexis"));
+    blog.setText("some text :) :D ");
+
     mockMvc.perform(MockMvcRequestBuilders.put(DOMAIN_BASE_URL + "/1")
-        .content(asJsonString(new Blog("test")))
+        .content(asJsonString(blog))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
@@ -92,6 +96,15 @@ public class BlogControllerTest {
     mockMvc.perform(MockMvcRequestBuilders.get(DOMAIN_BASE_URL))
         .andExpect(status().isOk());
 
+  }
+
+  @Test
+  public void putInvaldBlog_ShouldReturnBadRequest() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.put(DOMAIN_BASE_URL + "/1")
+        .content(asJsonString(new Blog()))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
   }
 
   public static String asJsonString(final Object obj) {
