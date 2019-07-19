@@ -1,6 +1,7 @@
 package com.blogEngine.repository;
 
 import com.blogEngine.domain.Blog;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -22,6 +23,11 @@ public class BlogRepositoryImpl implements BlogRepositoryCustom {
     Query query = new Query();
     query.addCriteria(Criteria.where("title").is(title));
     return mongoTemplate.findAndRemove(query, Blog.class);
+  }
+
+  @Override
+  public List<Blog> getBlogs() {
+    return mongoTemplate.findAll(Blog.class);
   }
 
   @Override

@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import com.blogEngine.domain.Blog;
 import com.blogEngine.restExceptions.BlogNotFoundException;
 import com.blogEngine.service.BlogService;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +27,11 @@ public class BlogController {
 
   public BlogController(BlogService blogService) {
     this.blogService = blogService;
+  }
+
+  @GetMapping
+  private List<Blog> getBlogs() {
+    return blogService.getBlogs();
   }
 
   @GetMapping("/{blogTitle}")

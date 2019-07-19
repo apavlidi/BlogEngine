@@ -1,6 +1,7 @@
 package com.blogEngine.repository;
 
 import com.blogEngine.domain.Blog;
+import java.util.List;
 
 
 public interface BlogRepositoryCustom {
@@ -11,4 +12,5 @@ public interface BlogRepositoryCustom {
 
   Blog deleteBlog(String title);
 
+  List<Blog> getBlogs();
 }

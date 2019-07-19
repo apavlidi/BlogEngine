@@ -7,10 +7,10 @@ import com.blogEngine.MongoCleanupRule;
 import com.blogEngine.domain.Blog;
 import com.blogEngine.repository.BlogRepository;
 import java.time.LocalDate;
+import java.util.List;
+import org.assertj.core.api.AssertionsForInterfaceTypes;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,18 +29,6 @@ public class BlogRepositoryTest {
 
   @Autowired
   private BlogRepository blogRepository;
-
-  @AfterEach
-  void clean() {
-  }
-
-  @BeforeEach
-  void setup() {
-    Blog blog = new Blog("title");
-    blog.setDate(LocalDate.now());
-    blog.setText("test");
-    blogRepository.saveBlog(blog);
-  }
 
   @Test
   public void saveBlog_returnsSavedBlog() {
@@ -82,6 +70,28 @@ public class BlogRepositoryTest {
     Blog title = blogRepository.findByTitle("title");
 
     assertThat(title.getText()).isEqualTo("test");
+  }
+
+  @Test
+  public void findBlogs_shouldReturnAllBlogs() {
+    Blog blog = new Blog("blog 1");
+    blog.setDate(LocalDate.now());
+    blog.setText("test");
+    blogRepository.saveBlog(blog);
+
+    blog = new Blog("blog 2");
+    blog.setDate(LocalDate.now());
+    blog.setText("test2");
+    blogRepository.saveBlog(blog);
+
+    List<Blog> blogs = blogRepository.getBlogs();
+
+    AssertionsForInterfaceTypes.assertThat(blogs).isNotNull();
+    assertThat(blogs.size()).isEqualTo(2);
+    assertThat(blogs.get(0).getTitle()).isEqualTo("blog 1");
+    assertThat(blogs.get(0).getText()).isEqualTo("test");
+    assertThat(blogs.get(1).getTitle()).isEqualTo("blog 2");
+    assertThat(blogs.get(1).getText()).isEqualTo("test2");
   }
 
 }

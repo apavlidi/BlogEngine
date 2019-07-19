@@ -3,6 +3,7 @@ package com.blogEngine.service;
 import com.blogEngine.domain.Blog;
 import com.blogEngine.repository.BlogRepository;
 import com.blogEngine.restExceptions.BlogNotFoundException;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,5 +36,9 @@ public class BlogService {
     blog.setDate(newBlog.getDate());
     blog.setTitle(newBlog.getTitle());
     return blogRepository.saveBlog(blog);
+  }
+
+  public List<Blog> getBlogs() {
+    return blogRepository.getBlogs();
   }
 }

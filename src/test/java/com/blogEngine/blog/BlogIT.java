@@ -1,6 +1,7 @@
 package com.blogEngine.blog;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -11,10 +12,12 @@ import com.blogEngine.domain.Blog;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.BlogRepository;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import javax.validation.constraints.Size;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -120,7 +124,7 @@ public class BlogIT {
   public void postBlogWithLessThanMinTitle_shouldReturnBadRequest() throws NoSuchFieldException {
     Blog blog = new Blog();
 
-    int minTitleLength = getSizePropertyForTitleAnnotation("title", "min");
+    int minTitleLength = getSizePropertyForFieldAnnotation("title", "min");
     String title = getStringWithLength(minTitleLength - 1);
     blog.setTitle(title);
     blog.setText("test");
@@ -135,7 +139,7 @@ public class BlogIT {
   public void postBlogWithMoreThanMaxTitle_shouldReturnBadRequest() throws NoSuchFieldException {
     Blog blog = new Blog();
 
-    int maxTitleLength = getSizePropertyForTitleAnnotation("title", "max");
+    int maxTitleLength = getSizePropertyForFieldAnnotation("title", "max");
     String title = getStringWithLength(maxTitleLength + 1);
     blog.setTitle(title);
     blog.setText("test");
@@ -150,7 +154,7 @@ public class BlogIT {
   public void postBlogWithLessThanMinText_shouldReturnBadRequest() throws NoSuchFieldException {
     Blog blog = new Blog();
 
-    int minTextLength = getSizePropertyForTitleAnnotation("text", "min");
+    int minTextLength = getSizePropertyForFieldAnnotation("text", "min");
     String text = getStringWithLength(minTextLength - 1);
     blog.setTitle("thats a correct title");
     blog.setText(text);
@@ -190,7 +194,50 @@ public class BlogIT {
     assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
   }
 
-  private int getSizePropertyForTitleAnnotation(String field, String property)
+
+  @Test
+  public void getBlogs_shouldReturnAllBlogs() {
+    Blog blog = new Blog("title");
+    blog.setTitle("test title");
+    blog.setText("test");
+    blog.setProfile(new Profile("alexis"));
+    blogRepository.saveBlog(blog);
+
+    blog = new Blog("title2");
+    blog.setTitle("test title2");
+    blog.setText("test2");
+    blog.setProfile(new Profile("alexis2"));
+    blogRepository.saveBlog(blog);
+
+    ResponseEntity<List<Blog>> response =
+        restTemplate.exchange(BASE_BLOG_URL, GET,
+            null, new ParameterizedTypeReference<List<Blog>>() {
+            });
+    List<Blog> blogs = response.getBody();
+
+    assertThat(blogs).isNotNull();
+    assertThat(blogs.size()).isEqualTo(2);
+    assertThat(blogs.get(0).getTitle()).isEqualTo("test title");
+    assertThat(blogs.get(1).getTitle()).isEqualTo("test title2");
+  }
+
+  @Test
+  @Ignore
+  public void getBlogsBasedOnProfileId_shouldReturnAllBlogsOfProfile() {
+    Blog blog = new Blog("title");
+    blog.setTitle("test title");
+    blog.setText("test");
+    blog.setProfile(new Profile("alexis"));
+    blogRepository.saveBlog(blog);
+
+    Blog blogRetrievedFromDb = blogRepository.findByTitle("test title");
+    String profileId = blogRetrievedFromDb.getProfile().getId();
+
+    ResponseEntity<Blog> blogsBasedOnProfile = restTemplate.getForEntity(BASE_BLOG_URL + "?q={\"profileId\":" + profileId, Blog.class);
+
+  }
+
+  private int getSizePropertyForFieldAnnotation(String field, String property)
       throws NoSuchFieldException {
     Class<?> blogClass = Blog.class;
     Size annotation = blogClass.getDeclaredField(field).getAnnotation(Size.class);

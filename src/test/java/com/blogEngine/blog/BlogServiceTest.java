@@ -10,9 +10,12 @@ import com.blogEngine.repository.BlogRepository;
 import com.blogEngine.restExceptions.BlogNotFoundException;
 import com.blogEngine.service.BlogService;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -65,6 +68,20 @@ public class BlogServiceTest {
 
     assertThat(blog.getDate()).isEqualTo(blogTobeDeleted.getDate().toString());
     assertThat(blog.getText()).isEqualTo(blogTobeDeleted.getText());
+  }
+
+
+  @Test
+  public void getBlogs_shouldReturnAllBlogs() {
+    List blogsList = Arrays.asList(new Blog("blog 1"), new Blog("blog 2"));
+    given(blogRepository.getBlogs()).willAnswer((Answer<List<Blog>>) invocation -> blogsList);
+
+    List<Blog> blogs = blogService.getBlogs();
+
+    assertThat(blogs).isNotNull();
+    assertThat(blogs.size()).isEqualTo(2);
+    assertThat(blogs.get(0).getTitle()).isEqualTo("blog 1");
+    assertThat(blogs.get(1).getTitle()).isEqualTo("blog 2");
   }
 
   @Test
