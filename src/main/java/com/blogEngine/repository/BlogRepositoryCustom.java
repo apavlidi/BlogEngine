@@ -16,4 +16,6 @@ public interface BlogRepositoryCustom {
   List<Blog> getBlogs();
 
   List<Blog> getBlogs(Map<String, String> restApiQueries);
+
+  Blog updateBlog(String title, Blog newBlog);
 }

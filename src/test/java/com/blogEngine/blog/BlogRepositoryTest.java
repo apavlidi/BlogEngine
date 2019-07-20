@@ -73,6 +73,25 @@ public class BlogRepositoryTest {
   }
 
   @Test
+  public void updateBlogByTitle_shouldReturnUpdatedBlog() {
+    Blog blog = new Blog("title");
+    blog.setDate(Calendar.getInstance());
+    blog.setText("test");
+    blogRepository.saveBlog(blog);
+    Blog blogFromDB = blogRepository.findByTitle(blog.getTitle());
+
+    Blog newBlog = new Blog("updated blog title");
+    blog.setDate(Calendar.getInstance());
+    blog.setText("updated blog text");
+
+    Blog updatedBlogFromDB = blogRepository.updateBlog(blog.getTitle(), newBlog);
+
+    assertThat(updatedBlogFromDB.getTitle()).isEqualTo(newBlog.getTitle());
+    assertThat(updatedBlogFromDB.getText()).isEqualTo(newBlog.getText());
+    assertThat(updatedBlogFromDB.getId()).isEqualTo(blogFromDB.getId());
+  }
+
+  @Test
   public void findBlogs_shouldReturnAllBlogs() {
     Blog blog = new Blog("blog 1");
     blog.setDate(Calendar.getInstance());

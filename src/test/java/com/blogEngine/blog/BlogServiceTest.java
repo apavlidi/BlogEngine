@@ -1,6 +1,8 @@
 package com.blogEngine.blog;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -44,7 +46,7 @@ public class BlogServiceTest {
 
     Blog blog = blogService.getBlogByTitle("title");
 
-    assertThat(blog.getDate()).isEqualTo(Calendar.getInstance().toString());
+    assertThat(blog.getDate()).isEqualTo(Calendar.getInstance());
     assertThat(blog.getText()).isEqualTo("test");
   }
 
@@ -55,7 +57,7 @@ public class BlogServiceTest {
 
     Blog blog = blogService.saveBlog(newBlog);
 
-    assertThat(blog.getDate()).isEqualTo(newBlog.getDate().toString());
+    assertThat(blog.getDate()).isEqualTo(newBlog.getDate());
     assertThat(blog.getText()).isEqualTo(newBlog.getText());
   }
 
@@ -66,15 +68,15 @@ public class BlogServiceTest {
 
     Blog blog = blogService.deleteBlog(blogTobeDeleted.getTitle());
 
-    assertThat(blog.getDate()).isEqualTo(blogTobeDeleted.getDate().toString());
+    assertThat(blog.getDate()).isEqualTo(blogTobeDeleted.getDate());
     assertThat(blog.getText()).isEqualTo(blogTobeDeleted.getText());
   }
 
 
   @Test
   public void getBlogs_shouldReturnAllBlogs() {
-    List blogsList = Arrays.asList(new Blog("blog 1"), new Blog("blog 2"));
-    given(blogRepository.getBlogs()).willAnswer((Answer<List<Blog>>) invocation -> blogsList);
+    List<Blog> blogsList = Arrays.asList(new Blog("blog 1"), new Blog("blog 2"));
+    given(blogRepository.getBlogs()).willAnswer((Answer<List>) invocation -> blogsList);
 
     List<Blog> blogs = blogService.getBlogs();
 
@@ -86,18 +88,16 @@ public class BlogServiceTest {
 
   @Test
   public void putBlog_shouldEditBlog() {
-    String title = "test title";
-    Blog blogFoundFromTitle = new Blog(title, "text", Calendar.getInstance());
-    Blog blogAfterEdit = new Blog("new title", "new text", Calendar.getInstance());
+    String titleOfBlogInDB = "title of new blog";
+    Blog newBlog = new Blog(titleOfBlogInDB);
+    Blog mockedUpdatedBlog = new Blog(titleOfBlogInDB);
 
-    given(blogRepository.findByTitle(title)).willReturn(blogFoundFromTitle);
-    given(blogRepository.saveBlog(blogFoundFromTitle)).willReturn(blogAfterEdit);
+    given(blogRepository.updateBlog(anyString(), any(Blog.class)))
+        .willReturn(mockedUpdatedBlog);
 
-    Blog newBlog = blogService.editBlogByTitle(blogAfterEdit, blogFoundFromTitle.getTitle());
+    Blog updatedBlog = blogService.editBlogByTitle(newBlog, titleOfBlogInDB);
 
-    assertThat(newBlog.getDate()).isEqualTo(blogAfterEdit.getDate().toString());
-    assertThat(newBlog.getText()).isEqualTo(blogAfterEdit.getText());
-    assertThat(newBlog.getText()).isEqualTo(blogAfterEdit.getText());
+    assertThat(mockedUpdatedBlog.getTitle()).isEqualTo(updatedBlog.getTitle());
   }
 
   @Test(expected = BlogNotFoundException.class)

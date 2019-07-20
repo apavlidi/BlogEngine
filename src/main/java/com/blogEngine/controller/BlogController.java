@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,10 +55,9 @@ public class BlogController {
     return HttpStatus.OK.toString();
   }
 
-  @PutMapping("/{blogTitle}")
-  private String putBlog(@Valid @RequestBody Blog newBlog, @PathVariable String blogTitle) {
-    blogService.editBlogByTitle(newBlog, blogTitle);
-    return HttpStatus.OK.toString();
+  @PutMapping(value = "/{blogTitle}", produces = {MediaType.APPLICATION_JSON_VALUE})
+  private Blog putBlog(@Valid @RequestBody Blog newBlog, @PathVariable String blogTitle) {
+    return blogService.editBlogByTitle(newBlog, blogTitle);
   }
 
   @ExceptionHandler

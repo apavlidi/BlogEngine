@@ -32,10 +32,10 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
   }
 
   @Override
-  public Profile updateProfile(String username, Profile profileToBeUpdated) {
+  public Profile updateProfile(String username, Profile newProfile) {
     Query query = new Query();
     query.addCriteria(Criteria.where("username").is(username));
     return mongoTemplate
-        .findAndReplace(query, profileToBeUpdated, FindAndReplaceOptions.options().returnNew());
+        .findAndReplace(query, newProfile, FindAndReplaceOptions.options().returnNew());
   }
 }

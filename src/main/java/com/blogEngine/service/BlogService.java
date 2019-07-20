@@ -33,10 +33,7 @@ public class BlogService {
   }
 
   public Blog editBlogByTitle(Blog newBlog, String title) {
-    Blog blog = blogRepository.findByTitle(title);
-    blog.setDate(newBlog.getDate());
-    blog.setTitle(newBlog.getTitle());
-    return blogRepository.saveBlog(blog);
+    return blogRepository.updateBlog(title, newBlog);
   }
 
   public List<Blog> getBlogs() {

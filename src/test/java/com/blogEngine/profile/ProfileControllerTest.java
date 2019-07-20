@@ -8,22 +8,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.blogEngine.BaseController;
 import com.blogEngine.controller.ProfileController;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.restExceptions.ProfileNotFoundException;
 import com.blogEngine.service.ProfileService;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest(ProfileController.class) //it only boots the component that is defined.
-public class ProfileControllerTest {
+public class ProfileControllerTest extends BaseController {
 
   @Autowired
   private MockMvc mockMvc;
