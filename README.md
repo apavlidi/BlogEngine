@@ -19,8 +19,10 @@ You can download MongoDB here: https://www.mongodb.com/what-is-mongodb
 The application is currently in development and its not yet fully implemented.
 
 ### Run the Test Suite:
-`mvn verify -Pfailsafe` 
+`mvn verify -PTSuite` 
 
+### Run the Test Suite with Reports using JaCoCo:
+`mvn verify -PTSuiteReport` 
 
 ### Deploy the Application
 `mvn deploy`
