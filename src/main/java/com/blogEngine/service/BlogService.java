@@ -41,7 +41,6 @@ public class BlogService {
   }
 
   public List<Blog> getBlogs(Map<String, String> restApiQueries) {
-    blogRepository.getBlogs(restApiQueries);
-    return null;
+    return blogRepository.getBlogs(restApiQueries);
   }
 }

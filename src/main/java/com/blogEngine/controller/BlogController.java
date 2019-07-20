@@ -1,9 +1,11 @@
 package com.blogEngine.controller;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import com.blogEngine.domain.Blog;
 import com.blogEngine.restExceptions.BlogNotFoundException;
+import com.blogEngine.restExceptions.WrongQueryParam;
 import com.blogEngine.service.BlogService;
 import java.util.HashMap;
 import java.util.List;
@@ -65,12 +67,42 @@ public class BlogController {
   private void blogNotFoundException(BlogNotFoundException ex) {
   }
 
+  @ExceptionHandler
+  @ResponseStatus(BAD_REQUEST)
+  private void wrongQueryParam(WrongQueryParam ex) {
+  }
+
   @GetMapping("/demo")
-  private List<Blog> getBlogs(@RequestParam(name = "sort", required = false) String sortValue) {
-    Map<String, String> restApiQueries = new HashMap<>();
-    restApiQueries.put("sort", sortValue);
+  private List<Blog> getBlogs(
+      @RequestParam(name = "sort", required = false) String sortValue,
+      @RequestParam(name = "select", required = false) String selectValue,
+      @RequestParam(name = "pageSize", required = false) String pageSizeValue,
+      @RequestParam(name = "page", required = false) String pageValue,
+      @RequestParam(name = "q", required = false) String searchValue) {
+    Map<String, String> restApiQueries = collectRestApiParams(sortValue, searchValue, selectValue, pageValue, pageSizeValue);
     return blogService.getBlogs(restApiQueries);
   }
 
+  private Map<String, String> collectRestApiParams(String sortValue, String searchValue, String selectFieldValue, String pageValue, String pageSizeValue) {
+    Map<String, String> restApiQueries = new HashMap<>();
+
+    if (sortValue != null) {
+      restApiQueries.put("sort", sortValue);
+    }
+    if (pageValue != null) {
+      restApiQueries.put("page", pageValue);
+    }
+    if (pageSizeValue != null) {
+      restApiQueries.put("pageSize", pageSizeValue);
+    }
+    if (searchValue != null) {
+      restApiQueries.put("q", searchValue);
+    }
+    if (selectFieldValue != null) {
+      restApiQueries.put("select", selectFieldValue);
+    }
+
+    return restApiQueries;
+  }
 
 }
