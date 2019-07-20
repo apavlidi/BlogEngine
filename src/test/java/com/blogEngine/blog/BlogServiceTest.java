@@ -9,8 +9,8 @@ import com.blogEngine.domain.Blog;
 import com.blogEngine.repository.BlogRepository;
 import com.blogEngine.restExceptions.BlogNotFoundException;
 import com.blogEngine.service.BlogService;
-import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,17 +40,17 @@ public class BlogServiceTest {
 
   @Test
   public void getBlogDetails_returnBlogInfo() {
-    given(blogRepository.findByTitle("title")).willReturn(new Blog("test", LocalDate.now()));
+    given(blogRepository.findByTitle("title")).willReturn(new Blog("test", Calendar.getInstance()));
 
     Blog blog = blogService.getBlogByTitle("title");
 
-    assertThat(blog.getDate()).isEqualTo(LocalDate.now().toString());
+    assertThat(blog.getDate()).isEqualTo(Calendar.getInstance().toString());
     assertThat(blog.getText()).isEqualTo("test");
   }
 
   @Test
   public void saveBlog_returnNewBlogInfo() {
-    Blog newBlog = new Blog("newBlog", LocalDate.now());
+    Blog newBlog = new Blog("newBlog", Calendar.getInstance());
     given(blogRepository.saveBlog(newBlog)).willReturn(newBlog);
 
     Blog blog = blogService.saveBlog(newBlog);
@@ -61,7 +61,7 @@ public class BlogServiceTest {
 
   @Test
   public void deleteBlog_returnDeletedBlogInfo() {
-    Blog blogTobeDeleted = new Blog("newBlog", LocalDate.now());
+    Blog blogTobeDeleted = new Blog("newBlog", Calendar.getInstance());
     given(blogRepository.deleteBlog(blogTobeDeleted.getTitle())).willReturn(blogTobeDeleted);
 
     Blog blog = blogService.deleteBlog(blogTobeDeleted.getTitle());
@@ -87,8 +87,8 @@ public class BlogServiceTest {
   @Test
   public void putBlog_shouldEditBlog() {
     String title = "test title";
-    Blog blogFoundFromTitle = new Blog(title, "text", LocalDate.now());
-    Blog blogAfterEdit = new Blog("new title", "new text", LocalDate.now());
+    Blog blogFoundFromTitle = new Blog(title, "text", Calendar.getInstance());
+    Blog blogAfterEdit = new Blog("new title", "new text", Calendar.getInstance());
 
     given(blogRepository.findByTitle(title)).willReturn(blogFoundFromTitle);
     given(blogRepository.saveBlog(blogFoundFromTitle)).willReturn(blogAfterEdit);

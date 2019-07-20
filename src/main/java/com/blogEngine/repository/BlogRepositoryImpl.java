@@ -2,7 +2,9 @@ package com.blogEngine.repository;
 
 import com.blogEngine.domain.Blog;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -28,6 +30,13 @@ public class BlogRepositoryImpl implements BlogRepositoryCustom {
   @Override
   public List<Blog> getBlogs() {
     return mongoTemplate.findAll(Blog.class);
+  }
+
+  @Override
+  public List<Blog> getBlogs(Map<String, String> restApiQueries) {
+    Query query = new Query();
+    query.with(new Sort(Sort.Direction.ASC, "date"));
+    return mongoTemplate.find(query, Blog.class);
   }
 
   @Override

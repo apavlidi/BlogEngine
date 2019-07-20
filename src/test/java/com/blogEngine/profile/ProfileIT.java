@@ -14,7 +14,6 @@ import com.blogEngine.repository.ProfileRepository;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,7 +101,6 @@ public class ProfileIT {
   }
 
   @Test
-  @Ignore
   public void postProfileWithNoneExistentParameters_shouldReturnBadRequest() throws JSONException {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(APPLICATION_JSON);

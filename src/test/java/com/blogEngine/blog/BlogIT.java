@@ -12,6 +12,7 @@ import com.blogEngine.domain.Blog;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.BlogRepository;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.constraints.Size;
@@ -54,7 +55,7 @@ public class BlogIT {
   @Test
   public void getBlog_returnBlogDetails() {
     Blog blog = new Blog("title");
-    blog.setDate(LocalDate.now());
+    blog.setDate(Calendar.getInstance());
     blog.setText("test");
     blogRepository.saveBlog(blog);
 

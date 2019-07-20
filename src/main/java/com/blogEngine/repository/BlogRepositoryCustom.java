@@ -2,6 +2,7 @@ package com.blogEngine.repository;
 
 import com.blogEngine.domain.Blog;
 import java.util.List;
+import java.util.Map;
 
 
 public interface BlogRepositoryCustom {
@@ -13,4 +14,6 @@ public interface BlogRepositoryCustom {
   Blog deleteBlog(String title);
 
   List<Blog> getBlogs();
+
+  List<Blog> getBlogs(Map<String, String> restApiQueries);
 }

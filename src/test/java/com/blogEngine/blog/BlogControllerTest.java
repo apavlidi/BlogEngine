@@ -11,8 +11,8 @@ import com.blogEngine.domain.Profile;
 import com.blogEngine.restExceptions.BlogNotFoundException;
 import com.blogEngine.service.BlogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,17 +38,17 @@ public class BlogControllerTest {
 
   @Test
   public void getBlog_ShouldReturnBlog() throws Exception {
-    given(blogService.getBlogByTitle(anyString())).willReturn(new Blog("test", LocalDate.now()));
+    given(blogService.getBlogByTitle(anyString())).willReturn(new Blog("test", Calendar.getInstance()));
 
     mockMvc.perform(MockMvcRequestBuilders.get(DOMAIN_BASE_URL + "/1"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("text").value("test"))
-        .andExpect(jsonPath("date").value(LocalDate.now().toString()));
+        .andExpect(jsonPath("date").value(Calendar.getInstance().toString()));
   }
 
   @Test
   public void postBlog_ShouldReturnStatusOK() throws Exception {
-    given(blogService.saveBlog(new Blog("test"))).willReturn(new Blog("test", LocalDate.now()));
+    given(blogService.saveBlog(new Blog("test"))).willReturn(new Blog("test", Calendar.getInstance()));
 
     Blog mockBlog = new Blog("test");
     mockBlog.setText("test text");

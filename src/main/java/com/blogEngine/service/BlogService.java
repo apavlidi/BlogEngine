@@ -4,6 +4,7 @@ import com.blogEngine.domain.Blog;
 import com.blogEngine.repository.BlogRepository;
 import com.blogEngine.restExceptions.BlogNotFoundException;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,5 +41,10 @@ public class BlogService {
 
   public List<Blog> getBlogs() {
     return blogRepository.getBlogs();
+  }
+
+  public List<Blog> getBlogs(Map<String, String> restApiQueries) {
+    blogRepository.getBlogs(restApiQueries);
+    return null;
   }
 }

@@ -6,7 +6,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import com.blogEngine.MongoCleanupRule;
 import com.blogEngine.domain.Blog;
 import com.blogEngine.repository.BlogRepository;
-import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import org.assertj.core.api.AssertionsForInterfaceTypes;
 import org.junit.Rule;
@@ -32,7 +32,7 @@ public class BlogRepositoryTest {
 
   @Test
   public void saveBlog_returnsSavedBlog() {
-    LocalDate date = LocalDate.of(2019, 3, 1);
+    Calendar date = Calendar.getInstance();
     Blog blog = new Blog();
     blog.setDate(date);
     blog.setTitle("title");
@@ -46,7 +46,7 @@ public class BlogRepositoryTest {
 
   @Test
   public void deleteBlog_returnsDeletedBlog() {
-    LocalDate date = LocalDate.of(2019, 3, 1);
+    Calendar date = Calendar.getInstance();
     Blog blog = new Blog();
     blog.setDate(date);
     blog.setTitle("title");
@@ -63,7 +63,7 @@ public class BlogRepositoryTest {
   @Test
   public void findBlogByTitle_returnsBlog() {
     Blog blog = new Blog("title");
-    blog.setDate(LocalDate.now());
+    blog.setDate(Calendar.getInstance());
     blog.setText("test");
     blogRepository.saveBlog(blog);
 
@@ -75,12 +75,12 @@ public class BlogRepositoryTest {
   @Test
   public void findBlogs_shouldReturnAllBlogs() {
     Blog blog = new Blog("blog 1");
-    blog.setDate(LocalDate.now());
+    blog.setDate(Calendar.getInstance());
     blog.setText("test");
     blogRepository.saveBlog(blog);
 
     blog = new Blog("blog 2");
-    blog.setDate(LocalDate.now());
+    blog.setDate(Calendar.getInstance());
     blog.setText("test2");
     blogRepository.saveBlog(blog);
 

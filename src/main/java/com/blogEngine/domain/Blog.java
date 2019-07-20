@@ -1,6 +1,6 @@
 package com.blogEngine.domain;
 
-import java.time.LocalDate;
+import java.util.Calendar;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -25,7 +25,7 @@ public class Blog {
   private String text;
 
   @CreatedDate
-  private LocalDate date;
+  private Calendar date;
 
   @NotNull
   @Valid
@@ -38,12 +38,12 @@ public class Blog {
     this.title = title;
   }
 
-  public Blog(String text, LocalDate date) {
+  public Blog(String text, Calendar date) {
     this.text = text;
     this.date = date;
   }
 
-  public Blog(String title, String text, LocalDate date) {
+  public Blog(String title, String text, Calendar date) {
     this.title = title;
     this.text = text;
     this.date = date;
@@ -65,11 +65,11 @@ public class Blog {
     this.text = text;
   }
 
-  public LocalDate getDate() {
+  public Calendar getDate() {
     return date;
   }
 
-  public void setDate(LocalDate date) {
+  public void setDate(Calendar date) {
     this.date = date;
   }
 
