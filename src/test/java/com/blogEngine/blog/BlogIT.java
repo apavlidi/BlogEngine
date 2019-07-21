@@ -157,6 +157,7 @@ public class BlogIT {
     String text = getStringWithLength(minTextLength - 1);
     blog.setTitle("thats a correct title");
     blog.setText(text);
+    blog.setProfile(new Profile("testUser"));
 
     ResponseEntity<Blog> response = restTemplate
         .postForEntity(BASE_BLOG_URL, blog, Blog.class);

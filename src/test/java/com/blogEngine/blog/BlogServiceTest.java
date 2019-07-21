@@ -42,11 +42,12 @@ public class BlogServiceTest {
 
   @Test
   public void getBlogDetails_returnBlogInfo() {
-    given(blogRepository.findByTitle("title")).willReturn(new Blog("test", Calendar.getInstance()));
+    Calendar date = Calendar.getInstance();
+    given(blogRepository.findByTitle("title")).willReturn(new Blog("test", date));
 
     Blog blog = blogService.getBlogByTitle("title");
 
-    assertThat(blog.getDate()).isEqualTo(Calendar.getInstance());
+    assertThat(blog.getDate().toString()).isEqualTo(date.toString());
     assertThat(blog.getText()).isEqualTo("test");
   }
 

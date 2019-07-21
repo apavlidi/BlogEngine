@@ -3,6 +3,7 @@ package com.blogEngine.blog;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -18,13 +19,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -54,29 +53,33 @@ public class BlogControllerTest extends BaseController {
   }
 
   @Test
-  public void postBlog_ShouldReturnStatusOK() throws Exception {
-    given(blogService.saveBlog(new Blog("test"))).willReturn(new Blog("test", Calendar.getInstance()));
-
+  public void postBlog_ShouldReturnBlog() throws Exception {
     Blog mockBlog = new Blog("test");
     mockBlog.setText("test text");
     mockBlog.setProfile(new Profile("testProfile"));
 
+    given(blogService.saveBlog(any(Blog.class))).willReturn(mockBlog);
+
     mockMvc.perform(MockMvcRequestBuilders.post(DOMAIN_BASE_URL)
         .content(asJsonString(mockBlog))
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+        .contentType(APPLICATION_JSON)
+        .accept(APPLICATION_JSON))
+        .andExpect(jsonPath("title").value(mockBlog.getTitle()))
         .andExpect(status().isOk());
   }
 
   @Test
-  @Ignore
-  public void deleteBlog_ShouldReturnStatusOK() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.delete(DOMAIN_BASE_URL + "/1"))
+  public void deleteBlog_ShouldReturnDeletedBlog() throws Exception {
+    given(blogService.deleteBlog(anyString())).willReturn(new Blog("testBlog"));
+
+    mockMvc.perform(MockMvcRequestBuilders.delete(DOMAIN_BASE_URL + "/testBlog")
+        .accept(APPLICATION_JSON))
+        .andExpect(jsonPath("title").value("testBlog"))
         .andExpect(status().isOk());
   }
 
   @Test
-  public void putBlog_ShouldReturnStatusOK() throws Exception {
+  public void putBlog_ShouldReturnUpdatedBlog() throws Exception {
     Blog newBlog = new Blog("blog 1");
     newBlog.setText("some text of a blog post");
     newBlog.setProfile(new Profile("alexis"));
@@ -85,7 +88,7 @@ public class BlogControllerTest extends BaseController {
 
     mockMvc.perform(MockMvcRequestBuilders.put(DOMAIN_BASE_URL + "/1")
         .content(asJsonString(newBlog))
-        .contentType(MediaType.APPLICATION_JSON))
+        .contentType(APPLICATION_JSON))
         .andExpect(jsonPath("title").value("blog changed"))
         .andExpect(status().isOk());
   }
@@ -111,8 +114,8 @@ public class BlogControllerTest extends BaseController {
   public void putInvaldBlog_ShouldReturnBadRequest() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders.put(DOMAIN_BASE_URL + "/1")
         .content(asJsonString(new Blog()))
-        .contentType(MediaType.APPLICATION_JSON)
-        .accept(MediaType.APPLICATION_JSON))
+        .contentType(APPLICATION_JSON)
+        .accept(APPLICATION_JSON))
         .andExpect(status().isBadRequest());
   }
 

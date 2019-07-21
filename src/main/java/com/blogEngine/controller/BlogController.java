@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,15 +46,13 @@ public class BlogController {
   }
 
   @PostMapping
-  private String postBlog(@Valid @RequestBody Blog blog) {
-    blogService.saveBlog(blog);
-    return HttpStatus.OK.toString();
+  private Blog postBlog(@Valid @RequestBody Blog blog) {
+    return blogService.saveBlog(blog);
   }
 
   @DeleteMapping("/{blogTitle}")
-  private String deleteBlog(@PathVariable String blogTitle) {
-    blogService.deleteBlog(blogTitle);
-    return HttpStatus.OK.toString();
+  private Blog deleteBlog(@PathVariable String blogTitle) {
+    return blogService.deleteBlog(blogTitle);
   }
 
   @PutMapping(value = "/{blogTitle}", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -70,6 +68,11 @@ public class BlogController {
   @ExceptionHandler
   @ResponseStatus(BAD_REQUEST)
   private void wrongQueryParam(WrongQueryParam ex) {
+  }
+
+  @ExceptionHandler
+  @ResponseStatus(BAD_REQUEST)
+  private void invalidArgs(MethodArgumentNotValidException ex) {
   }
 
   @GetMapping("/demo")
