@@ -119,7 +119,8 @@ public class BlogRepositoryImpl implements BlogRepositoryCustom {
     try {
       if (restApiQueries.get("sort") != null) {
         String sortQueryParam = restApiQueries.get("sort");
-        Direction sortDir = sortQueryParam.substring(0, 1).equals("-") ? Direction.ASC : Direction.DESC;
+        Direction sortDir =
+            sortQueryParam.substring(0, 1).equals("-") ? Direction.ASC : Direction.DESC;
         String sortBy = sortQueryParam.substring(1);
         query.with(new Sort(sortDir, sortBy));
       }
