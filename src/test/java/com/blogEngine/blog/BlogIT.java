@@ -233,7 +233,8 @@ public class BlogIT {
     Blog blogRetrievedFromDb = blogRepository.findByTitle("test title");
     String profileId = blogRetrievedFromDb.getProfile().getId();
 
-    ResponseEntity<Blog> blogsBasedOnProfile = restTemplate.getForEntity(BASE_BLOG_URL + "?q={\"profileId\":" + profileId, Blog.class);
+    ResponseEntity<Blog> blogsBasedOnProfile = restTemplate
+        .getForEntity(BASE_BLOG_URL + "?q={\"profileId\":" + profileId, Blog.class);
 
   }
 
