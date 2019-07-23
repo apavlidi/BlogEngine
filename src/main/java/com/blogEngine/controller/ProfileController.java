@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.restExceptions.ProfileNotFoundException;
 import com.blogEngine.service.ProfileService;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,6 +28,11 @@ public class ProfileController {
 
   public ProfileController(ProfileService profileService) {
     this.profileService = profileService;
+  }
+
+  @GetMapping
+  private List<Profile> getAllProfiles() {
+    return profileService.getAllProfiles();
   }
 
   @GetMapping("/{username}")

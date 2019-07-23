@@ -1,6 +1,7 @@
 package com.blogEngine.repository;
 
 import com.blogEngine.domain.Profile;
+import java.util.List;
 
 public interface ProfileRepositoryCustom {
 
@@ -11,4 +12,6 @@ public interface ProfileRepositoryCustom {
   Profile deleteProfile(String username);
 
   Profile updateProfile(String username, Profile profileToBeUpdated);
+
+  List<Profile> getAllProfiles();
 }

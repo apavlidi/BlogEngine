@@ -2,6 +2,7 @@ package com.blogEngine.profile;
 
 import static com.blogEngine.config.DatabaseProfiles.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -11,6 +12,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import com.blogEngine.MongoCleanupRule;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.ProfileRepository;
+import java.util.List;
 import java.util.Objects;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -113,6 +116,27 @@ public class ProfileIT {
         .postForEntity(DOMAIN_PROFILE_URL, request, String.class);
 
     assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
+  }
+
+  @Test
+  public void getProfiles_shouldReturnAllProfiles() {
+    profileRepository.save(new Profile("testProfile1"));
+    profileRepository.save(new Profile("testProfile2"));
+
+    ResponseEntity<List<Profile>> response =
+        restTemplate.exchange(DOMAIN_PROFILE_URL, GET,
+            null, new ParameterizedTypeReference<List<Profile>>() {
+            });
+    List<Profile> profiles = response.getBody();
+
+    assertThat(response.getStatusCode()).isEqualTo(OK);
+    assertThat(profiles).isNotNull();
+    assertThat(profiles.size()).isEqualTo(2);
+    assertThat(profiles.stream().anyMatch(profile -> profile.getUsername().equals("testProfile1")
+    )).isTrue();
+    assertThat(profiles.stream().anyMatch(profile -> profile.getUsername().equals("testProfile2")
+    )).isTrue();
+
   }
 
 }

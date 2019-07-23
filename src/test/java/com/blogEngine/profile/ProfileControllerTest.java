@@ -1,6 +1,7 @@
 package com.blogEngine.profile;
 
 import static com.blogEngine.blog.BlogControllerTest.asJsonString;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -17,11 +18,15 @@ import com.blogEngine.controller.ProfileController;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.restExceptions.ProfileNotFoundException;
 import com.blogEngine.service.ProfileService;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Test;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 @WebMvcTest(ProfileController.class) //it only boots the component that is defined.
 public class ProfileControllerTest extends BaseController {
@@ -112,6 +117,23 @@ public class ProfileControllerTest extends BaseController {
     mockMvc.perform(
         put(BASE_PROFILE_URL + "/alexis").content(asJsonString(newProfile))
             .contentType(APPLICATION_JSON)).andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void getProfiles_ShouldReturnAllProfiles() throws Exception {
+    List<Profile> profilesList = Arrays.asList(new Profile("test1"), new Profile("test2"));
+
+    given(profileService.getAllProfiles())
+        .willAnswer((Answer<List<Profile>>) invocation -> profilesList);
+
+    MvcResult mvcResult = mockMvc.perform(get(BASE_PROFILE_URL)
+        .contentType(APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    String jsonBodyResponse = mvcResult.getResponse().getContentAsString();
+    assertThat(jsonBodyResponse.indexOf("test1")).isNotEqualTo(-1);
+    assertThat(jsonBodyResponse.indexOf("test2")).isNotEqualTo(-1);
   }
 
 }

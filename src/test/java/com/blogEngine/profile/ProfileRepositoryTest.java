@@ -6,6 +6,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import com.blogEngine.MongoCleanupRule;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.ProfileRepository;
+import java.util.List;
+import java.util.function.Predicate;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,5 +71,23 @@ public class ProfileRepositoryTest {
     assertThat(updatedProfile).isEqualTo(null);
   }
 
+  @Test
+  public void getAllProfiles_shouldReturnProfiles() {
+    Profile profileAlexis = new Profile("alexis");
+    profileRepository.save(profileAlexis);
+    Profile profileGeorge = new Profile("george");
+    profileRepository.save(profileGeorge);
+
+    List<Profile> allProfiles = profileRepository.getAllProfiles();
+
+    assertThat(allProfiles).isNotNull();
+    assertThat(allProfiles.size()).isEqualTo(2);
+    assertThat(allProfiles.stream().anyMatch(findUsername("alexis"))).isTrue();
+    assertThat(allProfiles.stream().anyMatch(findUsername("george"))).isTrue();
+  }
+
+  private Predicate<Profile> findUsername(String profile1) {
+    return profile -> profile.getUsername().equals(profile1);
+  }
 
 }

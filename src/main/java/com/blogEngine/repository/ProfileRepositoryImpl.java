@@ -1,6 +1,7 @@
 package com.blogEngine.repository;
 
 import com.blogEngine.domain.Profile;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndReplaceOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -37,5 +38,10 @@ public class ProfileRepositoryImpl implements ProfileRepositoryCustom {
     query.addCriteria(Criteria.where("username").is(username));
     return mongoTemplate
         .findAndReplace(query, newProfile, FindAndReplaceOptions.options().returnNew());
+  }
+
+  @Override
+  public List<Profile> getAllProfiles() {
+    return mongoTemplate.findAll(Profile.class);
   }
 }

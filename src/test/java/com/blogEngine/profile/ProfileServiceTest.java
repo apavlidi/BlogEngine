@@ -9,8 +9,12 @@ import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.ProfileRepository;
 import com.blogEngine.restExceptions.ProfileNotFoundException;
 import com.blogEngine.service.ProfileService;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -49,7 +53,6 @@ public class ProfileServiceTest {
 
   @Test
   public void deleteProfile_shouldReturnDeletedProfile() {
-
     Profile mockedProfile = new Profile("alexis");
     given(profileRepository.deleteProfile("alexis")).willReturn(mockedProfile);
 
@@ -81,5 +84,22 @@ public class ProfileServiceTest {
     profileService.updateProfile("alexis", profileToBeUpdated);
   }
 
+  @Test
+  public void getAllProfiles_shouldReturnProfiles() {
+    List<Profile> profilesList = Arrays.asList(new Profile("profile1"), new Profile("profile2"));
+    given(profileRepository.getAllProfiles())
+        .willAnswer((Answer<List<Profile>>) invocation -> profilesList);
+
+    List<Profile> allProfiles = profileService.getAllProfiles();
+
+    assertThat(allProfiles).isNotNull();
+    assertThat(allProfiles.size()).isEqualTo(2);
+    assertThat(allProfiles.stream().anyMatch(findUsername("profile1"))).isTrue();
+    assertThat(allProfiles.stream().anyMatch(findUsername("profile2"))).isTrue();
+  }
+
+  private Predicate<Profile> findUsername(String profile1) {
+    return profile -> profile.getUsername().equals(profile1);
+  }
 
 }

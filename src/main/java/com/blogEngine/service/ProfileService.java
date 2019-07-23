@@ -3,6 +3,7 @@ package com.blogEngine.service;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.ProfileRepository;
 import com.blogEngine.restExceptions.ProfileNotFoundException;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,4 +37,7 @@ public class ProfileService {
     return updatedProfile;
   }
 
+  public List<Profile> getAllProfiles() {
+    return profileRepository.getAllProfiles();
+  }
 }
