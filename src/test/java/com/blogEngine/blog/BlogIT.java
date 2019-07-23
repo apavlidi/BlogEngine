@@ -11,6 +11,7 @@ import com.blogEngine.config.DatabaseProfiles;
 import com.blogEngine.domain.Blog;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.BlogRepository;
+import com.blogEngine.repository.ProfileRepository;
 import java.util.List;
 import java.util.Objects;
 import javax.validation.constraints.Size;
@@ -46,6 +47,9 @@ public class BlogIT {
 
   @Autowired
   private BlogRepository blogRepository;
+
+  @Autowired
+  private ProfileRepository profileRepository;
 
   @Autowired
   private MongoTemplate mongoTemplate;
@@ -99,12 +103,15 @@ public class BlogIT {
 
   @Test
   public void postBlogWithProfile_shouldReturnOK() {
+    Profile testProfile = new Profile("testProfile");
+    profileRepository.save(testProfile);
+
     Blog testBlog = new Blog("Some valid title");
     testBlog.setText("Some valid text");
-    testBlog.setProfile(new Profile("testProfile"));
+    testBlog.setProfile(testProfile);
 
-    ResponseEntity<String> response = restTemplate
-        .postForEntity(BASE_BLOG_URL, testBlog, String.class);
+    ResponseEntity<Blog> response = restTemplate
+        .postForEntity(BASE_BLOG_URL, testBlog, Blog.class);
 
     assertThat(response.getStatusCode()).isEqualTo(OK);
   }
@@ -194,19 +201,24 @@ public class BlogIT {
     assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
   }
 
-
   @Test
   public void getBlogs_shouldReturnAllBlogs() {
+    Profile profile = new Profile("alexis");
+    profileRepository.save(profile);
+
     Blog blog = new Blog("title");
     blog.setTitle("test title");
     blog.setText("test");
-    blog.setProfile(new Profile("alexis"));
+    blog.setProfile(profile);
     blogRepository.saveBlog(blog);
+
+    profile = new Profile("george");
+    profileRepository.save(profile);
 
     blog = new Blog("title2");
     blog.setTitle("test title2");
     blog.setText("test2");
-    blog.setProfile(new Profile("alexis2"));
+    blog.setProfile(profile);
     blogRepository.saveBlog(blog);
 
     ResponseEntity<List<Blog>> response =
@@ -224,10 +236,13 @@ public class BlogIT {
   @Test
   @Ignore
   public void getBlogsBasedOnProfileId_shouldReturnAllBlogsOfProfile() {
+    Profile profile = new Profile("alexis");
+    profileRepository.save(profile);
+
     Blog blog = new Blog("title");
     blog.setTitle("test title");
     blog.setText("test");
-    blog.setProfile(new Profile("alexis"));
+    blog.setProfile(profile);
     blogRepository.saveBlog(blog);
 
     Blog blogRetrievedFromDb = blogRepository.findByTitle("test title");
@@ -235,7 +250,6 @@ public class BlogIT {
 
     ResponseEntity<Blog> blogsBasedOnProfile = restTemplate
         .getForEntity(BASE_BLOG_URL + "?q={\"profileId\":" + profileId, Blog.class);
-
   }
 
   private int getSizePropertyForFieldAnnotation(String field, String property)

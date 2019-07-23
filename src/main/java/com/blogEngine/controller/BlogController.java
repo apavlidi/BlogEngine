@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
+import org.springframework.data.mapping.MappingException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -58,6 +59,11 @@ public class BlogController {
   @PutMapping(value = "/{blogTitle}", produces = {MediaType.APPLICATION_JSON_VALUE})
   private Blog putBlog(@Valid @RequestBody Blog newBlog, @PathVariable String blogTitle) {
     return blogService.editBlogByTitle(newBlog, blogTitle);
+  }
+
+  @ExceptionHandler
+  @ResponseStatus(BAD_REQUEST)
+  private void blogMappingException(MappingException ex) {
   }
 
   @ExceptionHandler

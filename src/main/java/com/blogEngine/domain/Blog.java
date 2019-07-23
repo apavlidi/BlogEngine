@@ -1,12 +1,12 @@
 package com.blogEngine.domain;
 
 import java.util.Calendar;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "blogs")
@@ -28,7 +28,7 @@ public class Blog {
   private Calendar date;
 
   @NotNull
-  @Valid
+  @DBRef
   private Profile profile;
 
   public Blog() {
