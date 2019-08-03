@@ -21,7 +21,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @GetMapping("/{commentId}")
+    @GetMapping(value = "/{commentId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public Comment getComment(@PathVariable String commentId) {
         return commentService.getCommentById(commentId);
     }
