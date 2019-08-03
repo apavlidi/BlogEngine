@@ -1,19 +1,11 @@
 package com.blogEngine.blog;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-
 import com.blogEngine.MongoCleanupRule;
 import com.blogEngine.domain.Blog;
 import com.blogEngine.repository.BlogRepository;
 import com.blogEngine.restExceptions.BlogNotFoundException;
 import com.blogEngine.service.BlogService;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +15,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import java.util.function.Predicate;
+
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @RunWith(SpringRunner.class)
@@ -83,8 +86,8 @@ public class BlogServiceTest {
 
     assertThat(blogs).isNotNull();
     assertThat(blogs.size()).isEqualTo(2);
-    assertThat(blogs.get(0).getTitle()).isEqualTo("blog 1");
-    assertThat(blogs.get(1).getTitle()).isEqualTo("blog 2");
+      AssertionsForClassTypes.assertThat(blogs.stream().anyMatch(findTitle("blog 1"))).isTrue();
+      AssertionsForClassTypes.assertThat(blogs.stream().anyMatch(findTitle("blog 2"))).isTrue();
   }
 
   @Test
@@ -107,5 +110,9 @@ public class BlogServiceTest {
 
     blogService.getBlogByTitle("title");
   }
+
+    private Predicate<Blog> findTitle(String title) {
+        return blog -> blog.getTitle().equals(title);
+    }
 
 }

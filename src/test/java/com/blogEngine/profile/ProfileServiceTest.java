@@ -1,17 +1,9 @@
 package com.blogEngine.profile;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.ProfileRepository;
 import com.blogEngine.restExceptions.ProfileNotFoundException;
 import com.blogEngine.service.ProfileService;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Predicate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.stubbing.Answer;
@@ -19,6 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @RunWith(SpringRunner.class)
@@ -98,8 +99,8 @@ public class ProfileServiceTest {
     assertThat(allProfiles.stream().anyMatch(findUsername("profile2"))).isTrue();
   }
 
-  private Predicate<Profile> findUsername(String profile1) {
-    return profile -> profile.getUsername().equals(profile1);
+    private Predicate<Profile> findUsername(String username) {
+        return profile -> profile.getUsername().equals(username);
   }
 
 }
