@@ -1,20 +1,11 @@
 package com.blogEngine.blog;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-
 import com.blogEngine.MongoCleanupRule;
 import com.blogEngine.config.DatabaseProfiles;
 import com.blogEngine.domain.Blog;
 import com.blogEngine.domain.Profile;
 import com.blogEngine.repository.BlogRepository;
 import com.blogEngine.repository.ProfileRepository;
-import java.util.List;
-import java.util.Objects;
-import javax.validation.constraints.Size;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Ignore;
@@ -32,6 +23,17 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+import java.util.Objects;
+
+import static com.blogEngine.Utilies.getSizePropertyForFieldAnnotation;
+import static com.blogEngine.Utilies.getStringWithLength;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) //it boots a server
@@ -130,7 +132,7 @@ public class BlogIT {
   public void postBlogWithLessThanMinTitle_shouldReturnBadRequest() throws NoSuchFieldException {
     Blog blog = new Blog();
 
-    int minTitleLength = getSizePropertyForFieldAnnotation("title", "min");
+    int minTitleLength = getSizePropertyForFieldAnnotation("title", "min", Blog.class);
     String title = getStringWithLength(minTitleLength - 1);
     blog.setTitle(title);
     blog.setText("test");
@@ -145,7 +147,7 @@ public class BlogIT {
   public void postBlogWithMoreThanMaxTitle_shouldReturnBadRequest() throws NoSuchFieldException {
     Blog blog = new Blog();
 
-    int maxTitleLength = getSizePropertyForFieldAnnotation("title", "max");
+    int maxTitleLength = getSizePropertyForFieldAnnotation("title", "max", Blog.class);
     String title = getStringWithLength(maxTitleLength + 1);
     blog.setTitle(title);
     blog.setText("test");
@@ -160,7 +162,7 @@ public class BlogIT {
   public void postBlogWithLessThanMinText_shouldReturnBadRequest() throws NoSuchFieldException {
     Blog blog = new Blog();
 
-    int minTextLength = getSizePropertyForFieldAnnotation("text", "min");
+    int minTextLength = getSizePropertyForFieldAnnotation("text", "min", Blog.class);
     String text = getStringWithLength(minTextLength - 1);
     blog.setTitle("thats a correct title");
     blog.setText(text);
@@ -252,20 +254,6 @@ public class BlogIT {
         .getForEntity(BASE_BLOG_URL + "?q={\"profileId\":" + profileId, Blog.class);
   }
 
-  private int getSizePropertyForFieldAnnotation(String field, String property)
-      throws NoSuchFieldException {
-    Class<?> blogClass = Blog.class;
-    Size annotation = blogClass.getDeclaredField(field).getAnnotation(Size.class);
-    return property.equals("max") ? annotation.max() : annotation.min();
-  }
 
-  private String getStringWithLength(int maxTitleLength) {
-    StringBuilder title = new StringBuilder();
-    for (int i = 0; i < maxTitleLength; i++) {
-      title.append("0");
-    }
-
-    return String.valueOf(title);
-  }
 
 }
