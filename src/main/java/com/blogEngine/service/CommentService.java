@@ -3,7 +3,6 @@ package com.blogEngine.service;
 import com.blogEngine.domain.Comment;
 import com.blogEngine.repository.CommentRepository;
 import com.blogEngine.restExceptions.CommentNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +10,14 @@ import java.util.List;
 @Service
 public class CommentService {
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+
+    public CommentService(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
     public Comment getCommentById(String commentId) {
-        Comment comment = commentRepository.getCommentById(commentId);
+        Comment comment = commentRepository.findCommentBy(commentId);
         if (comment == null) {
             throw new CommentNotFoundException();
         }
@@ -23,7 +25,7 @@ public class CommentService {
     }
 
     public List<Comment> getComments() {
-        return commentRepository.getComments();
+        return commentRepository.findAllComments();
     }
 
     public Comment saveComment(Comment comment) {
@@ -31,7 +33,7 @@ public class CommentService {
     }
 
     public Comment delete(String commentId) {
-        Comment comment = commentRepository.deleteById(commentId);
+        Comment comment = commentRepository.deleteBy(commentId);
         if (comment == null) {
             throw new CommentNotFoundException();
         }

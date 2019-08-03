@@ -41,7 +41,7 @@ public class CommentServiceTest {
         tempComment.setBlog(new Blog("test blog"));
         tempComment.setComments(Collections.singletonList(new Comment()));
 
-        given(commentRepository.getCommentById(anyString())).willReturn(tempComment);
+        given(commentRepository.findCommentBy(anyString())).willReturn(tempComment);
         Comment comment = commentService.getCommentById(commentId);
 
         assertThat(comment).isNotNull();
@@ -53,7 +53,7 @@ public class CommentServiceTest {
 
     @Test
     public void getCommentsShouldReturnAllComments() {
-        given(commentRepository.getComments()).willReturn(Arrays.asList(new Comment("commentId1"), new Comment("commentId2")));
+        given(commentRepository.findAllComments()).willReturn(Arrays.asList(new Comment("commentId1"), new Comment("commentId2")));
 
         List<Comment> comments = commentService.getComments();
 
@@ -67,7 +67,7 @@ public class CommentServiceTest {
     public void getCommentByNonExistentIdShouldThrowNotCommentFoundException() {
         String commentId = "nonExistent";
 
-        given(commentRepository.getCommentById(anyString())).willReturn(null);
+        given(commentRepository.findCommentBy(anyString())).willReturn(null);
         commentService.getCommentById(commentId);
     }
 
@@ -95,7 +95,7 @@ public class CommentServiceTest {
         commentToBeDeleted.setBlog(new Blog("test blog"));
         commentToBeDeleted.setComments(Collections.singletonList(new Comment()));
 
-        given(commentRepository.deleteById(anyString())).willReturn(commentToBeDeleted);
+        given(commentRepository.deleteBy(anyString())).willReturn(commentToBeDeleted);
         Comment deletedComment = commentService.delete(commentId);
 
         assertThat(deletedComment).isNotNull();
@@ -114,7 +114,7 @@ public class CommentServiceTest {
         commentToBeDeleted.setBlog(new Blog("test blog"));
         commentToBeDeleted.setComments(Collections.singletonList(new Comment()));
 
-        given(commentRepository.deleteById(anyString())).willReturn(null);
+        given(commentRepository.deleteBy(anyString())).willReturn(null);
         commentService.delete(commentId);
     }
 
