@@ -53,7 +53,7 @@ public class CommentServiceTest {
 
     @Test
     public void getCommentsShouldReturnAllComments() {
-        given(commentRepository.findAllComments()).willReturn(Arrays.asList(new Comment("commentId1"), new Comment("commentId2")));
+        given(commentRepository.findAll()).willReturn(Arrays.asList(new Comment("commentId1"), new Comment("commentId2")));
 
         List<Comment> comments = commentService.getComments();
 

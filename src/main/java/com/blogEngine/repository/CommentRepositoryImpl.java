@@ -2,9 +2,10 @@ package com.blogEngine.repository;
 
 import com.blogEngine.domain.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.FindAndReplaceOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
-
-import java.util.List;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
@@ -18,21 +19,20 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
     @Override
     public Comment saveComment(Comment comment) {
-        return null;
-    }
-
-    @Override
-    public List<Comment> findAllComments() {
-        return null;
+        return mongoTemplate.save(comment);
     }
 
     @Override
     public Comment deleteBy(String commentId) {
-        return null;
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(commentId));
+        return mongoTemplate.findAndRemove(query, Comment.class);
     }
 
     @Override
     public Comment update(String commentId, Comment newComment) {
-        return null;
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(commentId));
+        return mongoTemplate.findAndReplace(query, newComment, FindAndReplaceOptions.options().returnNew());
     }
 }
