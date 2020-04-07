@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "profile")
-
 public class ProfileController {
 
   private final ProfileService profileService;
