@@ -10,41 +10,41 @@ import java.util.List;
 @Service
 public class CommentService {
 
-    private final CommentRepository commentRepository;
+  private final CommentRepository commentRepository;
 
-    public CommentService(CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-    }
+  public CommentService(CommentRepository commentRepository) {
+    this.commentRepository = commentRepository;
+  }
 
-    public Comment getCommentById(String commentId) {
-        Comment comment = commentRepository.findCommentBy(commentId);
-        if (comment == null) {
-            throw new CommentNotFoundException();
-        }
-        return comment;
+  public Comment getCommentById(String commentId) {
+    Comment comment = commentRepository.findCommentBy(commentId);
+    if (comment == null) {
+      throw new CommentNotFoundException();
     }
+    return comment;
+  }
 
-    public List<Comment> getComments() {
-        return commentRepository.findAll();
-    }
+  public List<Comment> getComments() {
+    return commentRepository.findAll();
+  }
 
-    public Comment saveComment(Comment comment) {
-        return commentRepository.saveComment(comment);
-    }
+  public Comment saveComment(Comment comment) {
+    return commentRepository.saveComment(comment);
+  }
 
-    public Comment delete(String commentId) {
-        Comment comment = commentRepository.deleteBy(commentId);
-        if (comment == null) {
-            throw new CommentNotFoundException();
-        }
-        return comment;
+  public Comment delete(String commentId) {
+    Comment comment = commentRepository.deleteBy(commentId);
+    if (comment == null) {
+      throw new CommentNotFoundException();
     }
+    return comment;
+  }
 
-    public Comment updateComment(String commentId, Comment newComment) {
-        Comment updatedComment = commentRepository.update(commentId, newComment);
-        if (updatedComment == null) {
-            throw new CommentNotFoundException();
-        }
-        return updatedComment;
+  public Comment updateComment(String commentId, Comment newComment) {
+    Comment updatedComment = commentRepository.update(commentId, newComment);
+    if (updatedComment == null) {
+      throw new CommentNotFoundException();
     }
+    return updatedComment;
+  }
 }
